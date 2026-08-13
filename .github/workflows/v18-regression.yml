@@ -1,0 +1,41 @@
+name: V18 Public Preview Regression
+on:
+  push:
+    branches: [main]
+  pull_request:
+jobs:
+  regression:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Public repository safety
+        run: node scripts/public-release-check.mjs
+      - name: V18 loading and streaming
+        run: node scripts/v18-loading-check.mjs
+      - name: Local launcher and runtime
+        run: node scripts/v18-local-runtime-check.mjs
+      - name: Rival grid race
+        run: node scripts/v18-rival-race-check.mjs
+      - name: Fishing
+        run: node scripts/v18-fishing-check.mjs
+      - name: City life
+        run: node scripts/v18-city-life-check.mjs
+      - name: Gamepad and remapping
+        run: node scripts/v18-gamepad-check.mjs
+      - name: Korean and English localization
+        run: node scripts/v17-i18n-check.mjs
+      - name: English data module
+        run: node scripts/v17-module-check.mjs en
+      - name: Korean data module
+        run: node scripts/v17-module-check.mjs ko
+      - name: Water, visibility and steering
+        run: node scripts/v16-water-steering-check.mjs
+      - name: Character system
+        run: node scripts/v15-character-check.mjs
+      - name: Adaptive audio
+        run: node scripts/v14-audio-check.mjs
+      - name: Package smoke test
+        run: node scripts/package-smoke-check.mjs

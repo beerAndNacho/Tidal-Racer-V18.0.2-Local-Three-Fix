@@ -1,0 +1,27 @@
+name: V17 Bilingual Regression
+on:
+  push:
+    branches: [main]
+  pull_request:
+jobs:
+  bilingual-check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - name: Korean / English localization
+        run: node scripts/v17-i18n-check.mjs
+      - name: English data module
+        run: node scripts/v17-module-check.mjs en
+      - name: Korean data module
+        run: node scripts/v17-module-check.mjs ko
+      - name: V16 water and steering
+        run: node scripts/v16-water-steering-check.mjs
+      - name: V15 character system
+        run: node scripts/v15-character-check.mjs
+      - name: V14 adaptive audio
+        run: node scripts/v14-audio-check.mjs
+      - name: Package smoke test
+        run: node scripts/package-smoke-check.mjs

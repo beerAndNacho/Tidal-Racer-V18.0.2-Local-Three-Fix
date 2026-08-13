@@ -1,0 +1,26 @@
+{
+  "common": {
+    "source": "REPLACE_WITH_VENDOR_OR_STUDIO",
+    "license": "REPLACE_WITH_COMMERCIAL_LICENSE",
+    "licenseUrl": "REPLACE_WITH_LICENSE_DOCUMENT_URL_OR_CONTRACT_ID",
+    "acquisitionDate": "REPLACE_WITH_YYYY-MM-DD"
+  },
+  "riders": {
+    "rhea": {"copyrightHolder":"REPLACE_WITH_RIGHTS_HOLDER","reference":"REPLACE_WITH_INVOICE_OR_ASSET_ID"},
+    "kai": {"copyrightHolder":"REPLACE_WITH_RIGHTS_HOLDER","reference":"REPLACE_WITH_INVOICE_OR_ASSET_ID"},
+    "sol": {"copyrightHolder":"REPLACE_WITH_RIGHTS_HOLDER","reference":"REPLACE_WITH_INVOICE_OR_ASSET_ID"},
+    "mina": {"copyrightHolder":"REPLACE_WITH_RIGHTS_HOLDER","reference":"REPLACE_WITH_INVOICE_OR_ASSET_ID"},
+    "jax": {"copyrightHolder":"REPLACE_WITH_RIGHTS_HOLDER","reference":"REPLACE_WITH_INVOICE_OR_ASSET_ID"},
+    "nari": {"copyrightHolder":"REPLACE_WITH_RIGHTS_HOLDER","reference":"REPLACE_WITH_INVOICE_OR_ASSET_ID"},
+    "omar": {"copyrightHolder":"REPLACE_WITH_RIGHTS_HOLDER","reference":"REPLACE_WITH_INVOICE_OR_ASSET_ID"},
+    "yuna": {"copyrightHolder":"REPLACE_WITH_RIGHTS_HOLDER","reference":"REPLACE_WITH_INVOICE_OR_ASSET_ID"},
+    "theo": {"copyrightHolder":"REPLACE_WITH_RIGHTS_HOLDER","reference":"REPLACE_WITH_INVOICE_OR_ASSET_ID"},
+    "amara": {"copyrightHolder":"REPLACE_WITH_RIGHTS_HOLDER","reference":"REPLACE_WITH_INVOICE_OR_ASSET_ID"},
+    "ren": {"copyrightHolder":"REPLACE_WITH_RIGHTS_HOLDER","reference":"REPLACE_WITH_INVOICE_OR_ASSET_ID"},
+    "luz": {"copyrightHolder":"REPLACE_WITH_RIGHTS_HOLDER","reference":"REPLACE_WITH_INVOICE_OR_ASSET_ID"},
+    "haneul": {"copyrightHolder":"REPLACE_WITH_RIGHTS_HOLDER","reference":"REPLACE_WITH_INVOICE_OR_ASSET_ID"},
+    "mako": {"copyrightHolder":"REPLACE_WITH_RIGHTS_HOLDER","reference":"REPLACE_WITH_INVOICE_OR_ASSET_ID"},
+    "ivy": {"copyrightHolder":"REPLACE_WITH_RIGHTS_HOLDER","reference":"REPLACE_WITH_INVOICE_OR_ASSET_ID"},
+    "zane": {"copyrightHolder":"REPLACE_WITH_RIGHTS_HOLDER","reference":"REPLACE_WITH_INVOICE_OR_ASSET_ID"}
+  }
+}

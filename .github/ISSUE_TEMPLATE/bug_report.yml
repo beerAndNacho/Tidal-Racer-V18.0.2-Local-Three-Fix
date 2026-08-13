@@ -1,0 +1,68 @@
+name: Bug report
+description: Report a reproducible game, launcher, graphics, audio, or input problem.
+title: "[Bug] "
+labels: ["bug"]
+body:
+  - type: markdown
+    attributes:
+      value: Thanks for helping improve the free public preview.
+  - type: input
+    id: browser
+    attributes:
+      label: Browser and version
+      placeholder: Chrome 140, Edge 140, Firefox 142...
+    validations:
+      required: true
+  - type: input
+    id: gpu
+    attributes:
+      label: GPU and operating system
+      placeholder: RTX 3060 / Windows 11
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Launch / loading
+        - Racing / rivals
+        - Steering / gamepad
+        - Fishing
+        - City life
+        - Graphics / performance
+        - Music / audio
+        - Localization / accessibility
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: steps
+    attributes:
+      label: Reproduction steps
+      description: Include the region, mode, keys/buttons, and what happened.
+      placeholder: |
+        1. Start at...
+        2. Press...
+        3. Observe...
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+    validations:
+      required: true
+  - type: input
+    id: fps
+    attributes:
+      label: Approximate FPS
+      placeholder: 60 FPS before, 22 FPS after
+  - type: checkboxes
+    id: safety
+    attributes:
+      label: Safety
+      options:
+        - label: I removed passwords, tokens, and unrelated personal information.
+          required: true
+

@@ -1,0 +1,36 @@
+{
+  "version": 2,
+  "generatedAt": "2026-08-12",
+  "tool": "OpenAI built-in image generation",
+  "policy": "Project-exclusive generated environment textures. Prompts prohibited readable text, brands, trademarks, people, vehicles, copied locations and watermarks.",
+  "files": [
+    {
+      "file": "facade-marina-mixed-use-v3.webp",
+      "sha256": "95e16470d138b4420924b3a797ec7db368c7c053d6c0c3948cb5363fcd657b6c",
+      "source": "exec-840b426b-da85-4304-b626-a35490edd7db.png",
+      "output": "1024x1024 WebP quality 92",
+      "promptSummary": "Frontal orthographic six-storey coastal limestone/concrete mixed-use facade with blank commercial bays and neutral daylight."
+    },
+    {
+      "file": "facade-marina-service-v3.webp",
+      "sha256": "b1f536c370d370a823b55197ec8c63a9835825271941c2117c0b1e272119c57e",
+      "source": "exec-628bb2e7-ea15-46ff-b3e6-c28494dee658.png",
+      "output": "1024x1024 WebP quality 92",
+      "promptSummary": "Frontal orthographic coastal industrial marina office and service facade with blank workshop bays and neutral daylight."
+    },
+    {
+      "file": "facade-coastal-photoreal-v4.png",
+      "sha256": "b55f0757e3fc0fabd6d449605bdd225ae14604fc766731a029211da8e3424ae9",
+      "source": "exec-6ae4b1f4-b1cd-4000-b152-b787aeefabb9.png",
+      "output": "1254x1254 PNG",
+      "promptSummary": "Original fictional front-facing coastal mixed-use facade atlas with weathered stucco, recessed glazing, balconies, air-conditioning units, salt streaks and blank ground-floor shopfronts under neutral diffuse material-capture light."
+    },
+    {
+      "file": "facade-harbor-modern-photoreal-v4.png",
+      "sha256": "8ad6caf0658c76f50e93e4dd45be07230e75b7226533e6a58f2a648bc9b27948",
+      "source": "exec-b58698c7-f829-444e-aac2-36e7cab0ab55.png",
+      "output": "1254x1254 PNG",
+      "promptSummary": "Original fictional front-facing contemporary harbor office and apartment facade atlas with precast concrete, deep aluminum-framed glazing, vertical louvers, glass balcony bays and blank retail fronts under neutral cloudy light."
+    }
+  ]
+}

@@ -1,0 +1,250 @@
+{
+  "version": 2,
+  "tool": "Tidal Racer project-authored Three.js GLB generator",
+  "authoringPass": "anatomical wet-gear v3",
+  "sourceScript": "scripts/generate-rider-glbs.mjs",
+  "license": "Project-authored original geometry; no third-party model or texture input",
+  "generatedAt": "2026-08-12T04:21:54.424Z",
+  "files": [
+    {
+      "id": "rhea",
+      "file": "assets/glb/riders/rhea-lod0.glb",
+      "bytes": 4173136,
+      "sha256": "b0df6a4ea2781daf3bfcab099b9fe933e977b1b81ad250f54e933ce84289967b",
+      "animations": [
+        "menu-idle",
+        "ride",
+        "hard-turn",
+        "drift",
+        "boost",
+        "landing",
+        "victory"
+      ]
+    },
+    {
+      "id": "kai",
+      "file": "assets/glb/riders/kai-lod0.glb",
+      "bytes": 4173360,
+      "sha256": "825330b7539d09c0d31463d59c3fafa22962b14480ffac53639588b955b1b16b",
+      "animations": [
+        "menu-idle",
+        "ride",
+        "hard-turn",
+        "drift",
+        "boost",
+        "landing",
+        "victory"
+      ]
+    },
+    {
+      "id": "sol",
+      "file": "assets/glb/riders/sol-lod0.glb",
+      "bytes": 4172884,
+      "sha256": "8e7f149069e40b3caad04af5a1dd3b070deabf4d3ea41d318babbf83ae0ee24d",
+      "animations": [
+        "menu-idle",
+        "ride",
+        "hard-turn",
+        "drift",
+        "boost",
+        "landing",
+        "victory"
+      ]
+    },
+    {
+      "id": "mina",
+      "file": "assets/glb/riders/mina-lod0.glb",
+      "bytes": 4173284,
+      "sha256": "47b27527090696b46efa7bf52d14266f4fc44bcb9d4625b1fad2f32e6883abda",
+      "animations": [
+        "menu-idle",
+        "ride",
+        "hard-turn",
+        "drift",
+        "boost",
+        "landing",
+        "victory"
+      ]
+    },
+    {
+      "id": "jax",
+      "file": "assets/glb/riders/jax-lod0.glb",
+      "bytes": 4173212,
+      "sha256": "014ba9d839f6cc14bda1473615b9f8685beeae83a53eff7cba850539052c0a5c",
+      "animations": [
+        "menu-idle",
+        "ride",
+        "hard-turn",
+        "drift",
+        "boost",
+        "landing",
+        "victory"
+      ]
+    },
+    {
+      "id": "nari",
+      "file": "assets/glb/riders/nari-lod0.glb",
+      "bytes": 4172952,
+      "sha256": "85262d93d3114a6dbc80315c82d5ff9509850cf72a962bc76508b1a3a9a0bd8f",
+      "animations": [
+        "menu-idle",
+        "ride",
+        "hard-turn",
+        "drift",
+        "boost",
+        "landing",
+        "victory"
+      ]
+    },
+    {
+      "id": "omar",
+      "file": "assets/glb/riders/omar-lod0.glb",
+      "bytes": 4173188,
+      "sha256": "4ab0a53b5d65bc873456adec9d4158b5d572f5f1af95446c00ddb39d777c027b",
+      "animations": [
+        "menu-idle",
+        "ride",
+        "hard-turn",
+        "drift",
+        "boost",
+        "landing",
+        "victory"
+      ]
+    },
+    {
+      "id": "yuna",
+      "file": "assets/glb/riders/yuna-lod0.glb",
+      "bytes": 4173240,
+      "sha256": "b0810b7ed5fdd4a946000bdfef3320d327baa8b156ebb36a320bf1f3b6bbe09a",
+      "animations": [
+        "menu-idle",
+        "ride",
+        "hard-turn",
+        "drift",
+        "boost",
+        "landing",
+        "victory"
+      ]
+    },
+    {
+      "id": "theo",
+      "file": "assets/glb/riders/theo-lod0.glb",
+      "bytes": 4173284,
+      "sha256": "417529824daf29e89fb7a4941da021d0a3c1eb6f3eb6fc80ad41cec4210b27b4",
+      "animations": [
+        "menu-idle",
+        "ride",
+        "hard-turn",
+        "drift",
+        "boost",
+        "landing",
+        "victory"
+      ]
+    },
+    {
+      "id": "amara",
+      "file": "assets/glb/riders/amara-lod0.glb",
+      "bytes": 4173444,
+      "sha256": "27934279dd414875d854ee479178241d6b7da3c5b3c6e2e77fae1dde7ab5756f",
+      "animations": [
+        "menu-idle",
+        "ride",
+        "hard-turn",
+        "drift",
+        "boost",
+        "landing",
+        "victory"
+      ]
+    },
+    {
+      "id": "ren",
+      "file": "assets/glb/riders/ren-lod0.glb",
+      "bytes": 4173352,
+      "sha256": "75f3192f29003421b26e0d7eeb57824befa1d5f93a567a46fc66d50a10caabd5",
+      "animations": [
+        "menu-idle",
+        "ride",
+        "hard-turn",
+        "drift",
+        "boost",
+        "landing",
+        "victory"
+      ]
+    },
+    {
+      "id": "luz",
+      "file": "assets/glb/riders/luz-lod0.glb",
+      "bytes": 4173272,
+      "sha256": "059de55a459de7925799b4710fe5b4beff55510b5659c711887deeacadab2eb2",
+      "animations": [
+        "menu-idle",
+        "ride",
+        "hard-turn",
+        "drift",
+        "boost",
+        "landing",
+        "victory"
+      ]
+    },
+    {
+      "id": "haneul",
+      "file": "assets/glb/riders/haneul-lod0.glb",
+      "bytes": 4173328,
+      "sha256": "f9c5b7487e5852cc1680ba0972a734ccde4df5b620c08e4c53c8ad2bad271f30",
+      "animations": [
+        "menu-idle",
+        "ride",
+        "hard-turn",
+        "drift",
+        "boost",
+        "landing",
+        "victory"
+      ]
+    },
+    {
+      "id": "mako",
+      "file": "assets/glb/riders/mako-lod0.glb",
+      "bytes": 4172940,
+      "sha256": "800705c6f1e95023b9d33352e4c8b9504531d1aaacb2a92bf3c873331379fa03",
+      "animations": [
+        "menu-idle",
+        "ride",
+        "hard-turn",
+        "drift",
+        "boost",
+        "landing",
+        "victory"
+      ]
+    },
+    {
+      "id": "ivy",
+      "file": "assets/glb/riders/ivy-lod0.glb",
+      "bytes": 4173384,
+      "sha256": "955a709e2943f17029cbb259d6b5f45da83cd3ce4788379adb6c6e1ff74e4323",
+      "animations": [
+        "menu-idle",
+        "ride",
+        "hard-turn",
+        "drift",
+        "boost",
+        "landing",
+        "victory"
+      ]
+    },
+    {
+      "id": "zane",
+      "file": "assets/glb/riders/zane-lod0.glb",
+      "bytes": 4173380,
+      "sha256": "a911df3732c8cef324397afd2c075219ee94907163bbcb4654f3587a1d33e55f",
+      "animations": [
+        "menu-idle",
+        "ride",
+        "hard-turn",
+        "drift",
+        "boost",
+        "landing",
+        "victory"
+      ]
+    }
+  ]
+}

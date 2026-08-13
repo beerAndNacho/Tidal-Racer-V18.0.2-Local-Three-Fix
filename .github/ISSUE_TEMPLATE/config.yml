@@ -1,0 +1,6 @@
+blank_issues_enabled: true
+contact_links:
+  - name: Play the latest release
+    url: https://github.com/beerAndNacho/Tidal-Racer-V18.0.2-Local-Three-Fix/releases/latest
+    about: Download the current free public preview before reporting an old issue.
+

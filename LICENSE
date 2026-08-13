@@ -1,0 +1,38 @@
+TIDAL RACER FREE PREVIEW LICENSE 1.0
+
+Copyright (c) 2026 beerAndNacho
+
+Permission is granted, free of charge, to any person obtaining a copy of
+Tidal Racer (the "Software") to:
+
+1. download, install, and play the Software for personal, educational, or
+   other non-commercial purposes;
+2. stream, record, review, and publish gameplay footage or screenshots,
+   including monetized creator content;
+3. inspect and modify the source code for personal or non-commercial use; and
+4. redistribute complete, unmodified copies of an official free release,
+   provided that this license and all third-party notices remain included and
+   no fee is charged for the Software itself.
+
+Modified public forks are permitted for non-commercial purposes when they:
+
+- clearly state that they are unofficial and modified;
+- credit "Tidal Racer by beerAndNacho";
+- retain this license and all third-party notices; and
+- do not use the Tidal Racer name or artwork in a way that implies endorsement.
+
+You may not sell, sublicense for commercial use, place the Software behind a
+paid access gate, mint its content as an NFT, or use its original assets to
+train a commercial model without separate written permission.
+
+This license does not replace the licenses of third-party components. Three.js
+is provided under the MIT License, and identified CC0 assets remain CC0. See
+vendor/three/LICENSE and assets/THIRD_PARTY_NOTICES.md.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE, AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES, OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT, OR OTHERWISE, ARISING FROM,
+OUT OF, OR IN CONNECTION WITH THE SOFTWARE OR THE USE OF THE SOFTWARE.
+

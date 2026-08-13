@@ -1,0 +1,20 @@
+{
+  "provider": "Poly Haven",
+  "providerUrl": "https://polyhaven.com/",
+  "license": "CC0",
+  "licenseUrl": "https://polyhaven.com/license",
+  "apiUrl": "https://api.polyhaven.com/",
+  "acquiredAt": "2026-08-11",
+  "resolution": "1k",
+  "files": [
+    {"assetId":"asphalt_03","source":"https://polyhaven.com/a/asphalt_03","file":"asphalt_03_diff_1k.jpg","channel":"baseColor","md5":"1dba74b167b3d8460717776b22ca42c5","sha256":"95ad02e2631c41cf9fdd6a37596cf75adb4fb8a8b6880567cc78ed1c41dc5681"},
+    {"assetId":"asphalt_03","source":"https://polyhaven.com/a/asphalt_03","file":"asphalt_03_nor_gl_1k.jpg","channel":"normalGL","md5":"e24cfa2b2c30c16374424eecbebfc201","sha256":"978de8349ce2e9989325099a6fd1f5ea6b2826528e1264606a5c51296b1e2888"},
+    {"assetId":"asphalt_03","source":"https://polyhaven.com/a/asphalt_03","file":"asphalt_03_arm_1k.jpg","channel":"aoRoughnessMetallic","md5":"e77204c8d988d17553bd2d77b936541c","sha256":"36e898a43fd828e71f5bc08fa0f86dc2c7338194c87eb6a2b30d7216318b9f31"},
+    {"assetId":"anti_slip_concrete","source":"https://polyhaven.com/a/anti_slip_concrete","file":"anti_slip_concrete_diff_1k.jpg","channel":"baseColor","md5":"14c4c298c0f3d466ce7f5732e5ae190b","sha256":"d3ec34d5eea2fe9cba9e9e11787488c49be6610dd8a07460ad310960eac60f24"},
+    {"assetId":"anti_slip_concrete","source":"https://polyhaven.com/a/anti_slip_concrete","file":"anti_slip_concrete_nor_gl_1k.jpg","channel":"normalGL","md5":"3c55f6f198e75dd6fcb20c4e2e10f9cc","sha256":"ec6cf4d4535c873b549fd5ec501ac48bfab3dbb72cc4953ee8f134aa8f02c521"},
+    {"assetId":"anti_slip_concrete","source":"https://polyhaven.com/a/anti_slip_concrete","file":"anti_slip_concrete_arm_1k.jpg","channel":"aoRoughnessMetallic","md5":"a3a3f9ff75cd5bc38af11d74b04d490e","sha256":"478e222f9e83d36f8b7471c37681bafc48e3f7eb17e5a7a9f9629bfe2a93d72f"},
+    {"assetId":"aerial_beach_02","source":"https://polyhaven.com/a/aerial_beach_02","file":"aerial_beach_02_diff_1k.jpg","channel":"baseColor","md5":"8add95ec469c7b776d3289e774927f28","sha256":"51a1a52942598a31156d671dc931d8c700d8a1fdfb462ee186699e8ee4ed0c15"},
+    {"assetId":"aerial_beach_02","source":"https://polyhaven.com/a/aerial_beach_02","file":"aerial_beach_02_nor_gl_1k.jpg","channel":"normalGL","md5":"846899ad7a4e9e3fab80e497c0dc890b","sha256":"149d36f120239215b7879deb3daa72f04baf605a45292c57aa5f5c26e26deebb"},
+    {"assetId":"aerial_beach_02","source":"https://polyhaven.com/a/aerial_beach_02","file":"aerial_beach_02_arm_1k.jpg","channel":"aoRoughnessMetallic","md5":"aafb629ac0812a7c5e36dae7b9ed0ea0","sha256":"830a25931502fb9e38f8c0d93a87cbb6b7edfafd9f0e51c2ec267b14c754251a"}
+  ]
+}

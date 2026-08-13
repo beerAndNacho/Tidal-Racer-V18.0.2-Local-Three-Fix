@@ -1,0 +1,48 @@
+import fs from 'node:fs';
+import { WAVE_COMPONENTS, waveHeight, seaStateFor } from '../v16/wave-model.js';
+const read=p=>fs.readFileSync(p,'utf8');
+const files={index:read('index.html'),main:read('v18/main.js'),engine:read('v18/engine.js')};
+const tests=[];const add=(name,ok,detail='')=>tests.push({name,ok:!!ok,detail});
+add('V16/V17 water title',files.index.includes('V18.0.2')&&files.index.includes('Race, Fish, Explore'));
+add('V16/V17 entrypoint',files.index.includes('./v17/main.js')||files.index.includes('./v18/bootstrap.js'));
+add('shared render/physics wave model',files.main.includes("from '../v16/wave-model.js'")&&files.engine.includes("from '../v16/wave-model.js'"));
+add('five wave spectra',WAVE_COMPONENTS.length>=5,`${WAVE_COMPONENTS.length} components`);
+let min=Infinity,max=-Infinity;
+for(let t=0;t<=18;t+=.3)for(let x=-480;x<=480;x+=32)for(let z=-480;z<=480;z+=32){const h=waveHeight(x,z,t,1);min=Math.min(min,h);max=Math.max(max,h)}
+add('rolling normal-sea range',max-min>=4.4,`range ${(max-min).toFixed(2)}m`);
+add('storm sea stronger than resort',seaStateFor('STORM STRAIT','STORM CELL')>seaStateFor('GOLDEN COAST',''),`${seaStateFor('STORM STRAIT','STORM CELL').toFixed(2)} vs ${seaStateFor('GOLDEN COAST','').toFixed(2)}`);
+add('subdivided dynamic water',files.engine.includes('PlaneGeometry(3400,3400,210,210)'));
+add('water vertex displacement',files.engine.includes('pos.setZ(i,renderWaveHeight'));
+add('30 Hz water update',files.engine.includes('1/30'));
+add('12 Hz foam update',files.engine.includes('1/12'));
+add('whitecap particles',files.engine.includes('foamCount=1800')&&files.engine.includes('waveCrestFactor'));
+const waterAlpha=Number(files.engine.match(/waterColor:[^,]+,[^}]*alpha:([\d.]+)/)?.[1]);
+add('transparent depth water',waterAlpha>=.65&&waterAlpha<=.85&&files.engine.includes('water.material.transparent=true'),`alpha ${waterAlpha}`);
+add('bounded Fresnel reflection',files.engine.includes('function upgradeWaterShader')&&files.engine.includes('clamp( reflectance, 0.0, 0.64 )'));
+add('distance absorption depth tint',files.engine.includes('tidalAbsorption')&&files.engine.includes('tidalShallowColor')&&files.engine.includes('tidalDeepColor'));
+add('water shader runtime diagnostic',files.engine.includes("document.body.dataset.waterShader=water.userData.shaderTier"));
+add('authored ocean micro detail',files.engine.includes('ocean-micro-height-v1.webp')&&files.engine.includes('oceanSurfaceDetail'));
+add('double shoreline foam',files.engine.includes('for(let band=0;band<2;band++)')&&files.engine.includes('shoreFoamMeshes'));
+add('water follows player',files.main.includes('updateWaterSurface(STATE.time,sea,px,pz)'));
+add('crest launch physics',files.main.includes('crestKick')&&files.main.includes('vertical+=crestKick'));
+add('wave-informed pitch and roll',files.main.includes('Math.atan2(front-back,7.5)')&&files.main.includes('Math.atan2(right-left,2.9)'));
+const exposure=Number(files.engine.match(/toneMappingExposure=([\d.]+)/)?.[1]);
+const sun=Number(files.engine.match(/DirectionalLight\([^,]+,([\d.]+)\)/)?.[1]);
+add('controlled exposure',Number.isFinite(exposure)&&exposure<=.86,`exposure ${exposure}`);
+add('controlled direct sunlight',Number.isFinite(sun)&&sun<=3.3,`sun ${sun}`);
+add('player-focused shadow frustum',files.engine.includes('export function updateSunFocus')&&files.engine.includes('camera.left=-320')&&files.engine.includes("document.body.dataset.shadowFocus='dynamic-640m-v2'")&&files.main.includes('updateSunFocus(px,pz)'));
+const bloom=files.engine.match(/quality==='ultra'\?\.(\d+):\.(\d+),\.(\d+),([\d.]+)\)\)/);
+const bloomUltra=bloom?Number(`.${bloom[1]}`):NaN,bloomBalanced=bloom?Number(`.${bloom[2]}`):NaN,bloomRadius=bloom?Number(`.${bloom[3]}`):NaN,bloomThreshold=bloom?Number(bloom[4]):NaN;
+add('reduced bloom washout',bloomUltra<=.22&&bloomBalanced<=.14&&bloomRadius<=.32&&bloomThreshold>=1.04,`strength ${bloomBalanced}/${bloomUltra}, threshold ${bloomThreshold}`);
+add('top-screen glare shade',files.index.includes('linear-gradient(180deg,rgba(6,14,20,.24)'));
+add('left key mapping',files.main.includes("KeyA:'left'")&&files.main.includes("ArrowLeft:'left'"));
+add('right key mapping',files.main.includes("KeyD:'right'")&&files.main.includes("ArrowRight:'right'"));
+add('positive left yaw sign',files.main.includes('const targetYaw=steer*steerAuthority*reverseSign')&&!files.main.includes('const targetYaw=-steer'));
+function simulate(steer){let x=0,z=0,heading=Math.PI,yawRate=0,speed=22;const dt=1/120,craftTurn=1,craftMax=44;for(let i=0;i<240;i++){const speedRatio=Math.min(1,Math.abs(speed)/craftMax),reverseSign=speed<-.5?-.68:1,steerAuthority=(.42+speedRatio*.66)*.82*craftTurn,targetYaw=steer*steerAuthority*reverseSign;yawRate+=(targetYaw-yawRate)*(1-Math.exp(-(3.3+speedRatio)*dt));heading+=yawRate*dt;x+=Math.sin(heading)*speed*dt;z+=Math.cos(heading)*speed*dt}return{x,z}}
+const left=simulate(1),right=simulate(-1);
+add('forward A/left moves screen-left',left.x<0,`x ${left.x.toFixed(2)}`);
+add('forward D/right moves screen-right',right.x>0,`x ${right.x.toFixed(2)}`);
+add('sea-state HUD',files.index.includes('seaStateHud')&&files.main.includes('SEA STATE'));
+add('V16+ debug handle',files.main.includes('window.__tidalV18')||files.main.includes('window.__tidalV16'));
+let failed=0;for(const t of tests){console.log(`${t.ok?'PASS':'FAIL'} ${t.name}${t.detail?` — ${t.detail}`:''}`);if(!t.ok)failed++}
+console.log(`\n${tests.length-failed}/${tests.length} V16 visibility/water/steering checks PASS`);process.exit(failed?1:0);

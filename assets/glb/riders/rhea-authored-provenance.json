@@ -1,0 +1,46 @@
+{
+  "version": 1,
+  "assetId": "rider-rhea-hero",
+  "productionFile": "assets/glb/riders/rhea-authored-cc0-v4.glb",
+  "productionBytes": 2801100,
+  "productionSha256": "0f95cec5bafa3bc787b2c30b650a06478f3a0a3a373bba487e24de8fdf31b1d5",
+  "source": {
+    "title": "Human Base Meshes Bundle v1.0.0 / Body Female - Realistic",
+    "publisher": "Blender Studio / Blender Foundation",
+    "bundleUrl": "https://download.blender.org/demo/bundles/bundles-3.6/human-base-meshes-bundle-v1.0.0.zip",
+    "bundleSha256": "46a912c0524072ac3b78c35d5d2471df7b8df102394a050ca8cd7184e3393648",
+    "extractedFile": "art-source/characters/blender-studio-human-base-female/human-base-female-realistic.blend",
+    "extractedBytes": 12968919,
+    "extractedSha256": "a18c0a14d9aa57b7c943f191a72247ab1af3ba4d9dec9d2b2a5624ff9b7c7398",
+    "license": "CC0 1.0 Universal",
+    "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+    "acquisitionDate": "2026-08-12"
+  },
+  "derivative": {
+    "tool": "Blender 5.2.0 LTS",
+    "buildScript": "scripts/blender/build-authored-rhea.py",
+    "workingFile": "art-source/characters/blender-studio-human-base-female/rhea-authored-working.blend",
+    "workingBytes": 1417244,
+    "workingSha256": "f0a43231ee8588c096c8006d385f962e7d02b068efa0477e8917eb88fc685fc0",
+    "authoredWork": [
+      "18-bone runtime armature",
+      "automatic heat skinning on the manifold Studio topology",
+      "IK-solved mounted racing pose",
+      "seven baked gameplay animation clips",
+      "fitted neoprene suit and life vest",
+      "helmet, visor, straps, reflective trim and competition gear",
+      "game-ready materials and GLB export settings"
+    ]
+  },
+  "validation": {
+    "nodes": 36,
+    "meshes": 17,
+    "primitives": 18,
+    "vertices": 51193,
+    "materials": 8,
+    "skins": 1,
+    "bones": 18,
+    "animations": 7,
+    "animationChannels": 378
+  }
+}

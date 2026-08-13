@@ -1,0 +1,34 @@
+name: Feature request
+description: Suggest one focused improvement to racing, fishing, or coastal life.
+title: "[Feature] "
+labels: ["enhancement"]
+body:
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Racing / rivals
+        - Fishing
+        - City life
+        - World / activities
+        - Graphics / performance
+        - Audio
+        - Controls / accessibility
+    validations:
+      required: true
+  - type: textarea
+    id: problem
+    attributes:
+      label: Player problem
+      description: What currently feels missing, unclear, or not fun?
+    validations:
+      required: true
+  - type: textarea
+    id: idea
+    attributes:
+      label: Proposed experience
+      description: Describe the player action, feedback, reward, and possible tradeoff.
+    validations:
+      required: true
+

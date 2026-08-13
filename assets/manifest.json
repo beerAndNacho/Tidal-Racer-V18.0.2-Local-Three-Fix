@@ -1,0 +1,443 @@
+{
+  "version": 18,
+  "policy": "Only project-authored, project-generated, or provenance-verified commercial-safe assets may be enabled. Every third-party file requires source, license, acquisition date, and SHA-256 metadata.",
+  "approvedSources": [
+    {
+      "id": "poly-haven-cc0",
+      "homepage": "https://polyhaven.com/",
+      "license": "CC0",
+      "licenseUrl": "https://polyhaven.com/license",
+      "status": "approved-for-environment-assets"
+    },
+    {
+      "id": "blender-studio-human-base-cc0",
+      "homepage": "https://download.blender.org/demo/bundles/bundles-3.6/",
+      "license": "CC0 1.0 Universal",
+      "licenseUrl": "https://creativecommons.org/publicdomain/zero/1.0/",
+      "status": "approved-for-character-derivatives"
+    }
+  ],
+  "pipeline": {
+    "format": "glb",
+    "compression": [
+      "draco",
+      "meshopt"
+    ],
+    "textures": [
+      "ktx2",
+      "webp"
+    ],
+    "up": "Y",
+    "units": "meters"
+  },
+  "assets": [
+    {
+      "id": "date-palm",
+      "category": "nature",
+      "url": "./assets/glb/date-palm.glb",
+      "enabled": false,
+      "scale": 1,
+      "reference": "https://threejsassets.com/assets?tier=free",
+      "source": "threejsassets-free"
+    },
+    {
+      "id": "street-tree",
+      "category": "nature",
+      "url": "./assets/glb/street-tree-01.glb",
+      "enabled": false,
+      "scale": 1,
+      "reference": "https://threejsassets.com/assets?tier=free",
+      "source": "threejsassets-free"
+    },
+    {
+      "id": "sandstone-boulder",
+      "category": "rock",
+      "url": "./assets/glb/sandstone-boulder.glb",
+      "enabled": false,
+      "scale": 1,
+      "reference": "https://threejsassets.com/assets?tier=free",
+      "source": "threejsassets-free"
+    },
+    {
+      "id": "rubble-scatter",
+      "category": "rock",
+      "url": "./assets/glb/rubble-scatter.glb",
+      "enabled": false,
+      "scale": 1,
+      "reference": "https://threejsassets.com/assets?tier=free",
+      "source": "threejsassets-free"
+    },
+    {
+      "id": "apartment-block",
+      "category": "city",
+      "url": "./assets/glb/apartment-block-01.glb",
+      "enabled": false,
+      "scale": 1,
+      "reference": "https://threejsassets.com/assets?tier=free",
+      "source": "threejsassets-free"
+    },
+    {
+      "id": "glass-skyscraper",
+      "category": "city",
+      "url": "./assets/glb/glass-skyscraper-01.glb",
+      "enabled": false,
+      "scale": 1,
+      "reference": "https://threejsassets.com/assets?tier=free",
+      "source": "threejsassets-free"
+    },
+    {
+      "id": "midrise-office",
+      "category": "city",
+      "url": "./assets/glb/midrise-office-01.glb",
+      "enabled": false,
+      "scale": 1,
+      "reference": "https://threejsassets.com/assets?tier=free",
+      "source": "threejsassets-free"
+    },
+    {
+      "id": "street-lamp",
+      "category": "street",
+      "url": "./assets/glb/street-lamp-01.glb",
+      "enabled": false,
+      "scale": 1,
+      "reference": "https://threejsassets.com/assets?tier=free",
+      "source": "threejsassets-free"
+    },
+    {
+      "id": "bench",
+      "category": "street",
+      "url": "./assets/glb/bench-01.glb",
+      "enabled": false,
+      "scale": 1,
+      "reference": "https://threejsassets.com/assets?tier=free",
+      "source": "threejsassets-free"
+    },
+    {
+      "id": "crate",
+      "category": "props",
+      "url": "./assets/glb/crate-01.glb",
+      "enabled": false,
+      "scale": 1,
+      "reference": "https://threejsassets.com/assets?tier=free",
+      "source": "threejsassets-free"
+    },
+    {
+      "id": "shore-straight",
+      "category": "shore",
+      "url": "./assets/glb/shore-straight-oasis-tile.glb",
+      "enabled": false,
+      "scale": 1,
+      "reference": "https://threejsassets.com/assets?tier=free",
+      "source": "threejsassets-free"
+    },
+    {
+      "id": "papyrus-reed",
+      "category": "nature",
+      "url": "./assets/glb/papyrus-reed.glb",
+      "enabled": false,
+      "scale": 1,
+      "reference": "https://threejsassets.com/assets?tier=free",
+      "source": "threejsassets-free"
+    },
+    {
+      "id": "cloud-set",
+      "category": "sky",
+      "url": "./assets/glb/cloud-set.glb",
+      "enabled": false,
+      "scale": 1,
+      "reference": "https://threejsassets.com/assets?tier=free",
+      "source": "threejsassets-free"
+    },
+    {
+      "id": "water-pond",
+      "category": "water",
+      "url": "./assets/glb/water-pond-01.glb",
+      "enabled": false,
+      "scale": 1,
+      "reference": "https://threejsassets.com/assets/water-pond-01",
+      "source": "threejsassets-free"
+    },
+    {
+      "id": "metropolis-street-tree",
+      "category": "nature",
+      "url": "./assets/glb/metropolis-street-tree-01.glb",
+      "enabled": false,
+      "scale": 1,
+      "reference": "https://threejsassets.com/assets?tier=free",
+      "source": "threejsassets-free"
+    },
+    {
+      "id": "day-sky-dome",
+      "category": "sky",
+      "url": "./assets/glb/day-sky-dome.glb",
+      "enabled": false,
+      "scale": 1,
+      "reference": "https://threejsassets.com/assets?tier=free",
+      "source": "threejsassets-free"
+    },
+    {
+      "id": "rider-rhea-hero",
+      "category": "rider",
+      "url": "./assets/glb/riders/rhea-authored-cc0-v4.glb",
+      "enabled": true,
+      "scale": 2,
+      "source": "blender-studio-cc0-tidal-racer-derivative",
+      "license": "CC0 1.0 Universal source with Tidal Racer project-authored derivative work",
+      "licenseUrl": "./assets/glb/riders/rhea-authored-provenance.json",
+      "acquisitionDate": "2026-08-12",
+      "sha256": "0f95cec5bafa3bc787b2c30b650a06478f3a0a3a373bba487e24de8fdf31b1d5",
+      "copyrightHolder": "Blender Studio / Blender Foundation; Tidal Racer derivative",
+      "requiredRig": "characterRig"
+    },
+    {
+      "id": "rider-kai-hero",
+      "category": "rider",
+      "url": "./assets/glb/riders/kai-lod0.glb",
+      "enabled": true,
+      "scale": 1,
+      "source": "tidal-racer-project-authored",
+      "license": "Project-authored original asset",
+      "licenseUrl": "./assets/glb/riders/provenance.json",
+      "acquisitionDate": "2026-08-12",
+      "sha256": "825330b7539d09c0d31463d59c3fafa22962b14480ffac53639588b955b1b16b",
+      "copyrightHolder": "Tidal Racer project",
+      "requiredRig": "characterRig"
+    },
+    {
+      "id": "rider-sol-hero",
+      "category": "rider",
+      "url": "./assets/glb/riders/sol-lod0.glb",
+      "enabled": true,
+      "scale": 1,
+      "source": "tidal-racer-project-authored",
+      "license": "Project-authored original asset",
+      "licenseUrl": "./assets/glb/riders/provenance.json",
+      "acquisitionDate": "2026-08-12",
+      "sha256": "8e7f149069e40b3caad04af5a1dd3b070deabf4d3ea41d318babbf83ae0ee24d",
+      "copyrightHolder": "Tidal Racer project",
+      "requiredRig": "characterRig"
+    },
+    {
+      "id": "rider-mina-hero",
+      "category": "rider",
+      "url": "./assets/glb/riders/mina-lod0.glb",
+      "enabled": true,
+      "scale": 1,
+      "source": "tidal-racer-project-authored",
+      "license": "Project-authored original asset",
+      "licenseUrl": "./assets/glb/riders/provenance.json",
+      "acquisitionDate": "2026-08-12",
+      "sha256": "47b27527090696b46efa7bf52d14266f4fc44bcb9d4625b1fad2f32e6883abda",
+      "copyrightHolder": "Tidal Racer project",
+      "requiredRig": "characterRig"
+    },
+    {
+      "id": "rider-jax-hero",
+      "category": "rider",
+      "url": "./assets/glb/riders/jax-lod0.glb",
+      "enabled": true,
+      "scale": 1,
+      "source": "tidal-racer-project-authored",
+      "license": "Project-authored original asset",
+      "licenseUrl": "./assets/glb/riders/provenance.json",
+      "acquisitionDate": "2026-08-12",
+      "sha256": "014ba9d839f6cc14bda1473615b9f8685beeae83a53eff7cba850539052c0a5c",
+      "copyrightHolder": "Tidal Racer project",
+      "requiredRig": "characterRig"
+    },
+    {
+      "id": "rider-nari-hero",
+      "category": "rider",
+      "url": "./assets/glb/riders/nari-lod0.glb",
+      "enabled": true,
+      "scale": 1,
+      "source": "tidal-racer-project-authored",
+      "license": "Project-authored original asset",
+      "licenseUrl": "./assets/glb/riders/provenance.json",
+      "acquisitionDate": "2026-08-12",
+      "sha256": "85262d93d3114a6dbc80315c82d5ff9509850cf72a962bc76508b1a3a9a0bd8f",
+      "copyrightHolder": "Tidal Racer project",
+      "requiredRig": "characterRig"
+    },
+    {
+      "id": "rider-omar-hero",
+      "category": "rider",
+      "url": "./assets/glb/riders/omar-lod0.glb",
+      "enabled": true,
+      "scale": 1,
+      "source": "tidal-racer-project-authored",
+      "license": "Project-authored original asset",
+      "licenseUrl": "./assets/glb/riders/provenance.json",
+      "acquisitionDate": "2026-08-12",
+      "sha256": "4ab0a53b5d65bc873456adec9d4158b5d572f5f1af95446c00ddb39d777c027b",
+      "copyrightHolder": "Tidal Racer project",
+      "requiredRig": "characterRig"
+    },
+    {
+      "id": "rider-yuna-hero",
+      "category": "rider",
+      "url": "./assets/glb/riders/yuna-lod0.glb",
+      "enabled": true,
+      "scale": 1,
+      "source": "tidal-racer-project-authored",
+      "license": "Project-authored original asset",
+      "licenseUrl": "./assets/glb/riders/provenance.json",
+      "acquisitionDate": "2026-08-12",
+      "sha256": "b0810b7ed5fdd4a946000bdfef3320d327baa8b156ebb36a320bf1f3b6bbe09a",
+      "copyrightHolder": "Tidal Racer project",
+      "requiredRig": "characterRig"
+    },
+    {
+      "id": "rider-theo-hero",
+      "category": "rider",
+      "url": "./assets/glb/riders/theo-lod0.glb",
+      "enabled": true,
+      "scale": 1,
+      "source": "tidal-racer-project-authored",
+      "license": "Project-authored original asset",
+      "licenseUrl": "./assets/glb/riders/provenance.json",
+      "acquisitionDate": "2026-08-12",
+      "sha256": "417529824daf29e89fb7a4941da021d0a3c1eb6f3eb6fc80ad41cec4210b27b4",
+      "copyrightHolder": "Tidal Racer project",
+      "requiredRig": "characterRig"
+    },
+    {
+      "id": "rider-amara-hero",
+      "category": "rider",
+      "url": "./assets/glb/riders/amara-lod0.glb",
+      "enabled": true,
+      "scale": 1,
+      "source": "tidal-racer-project-authored",
+      "license": "Project-authored original asset",
+      "licenseUrl": "./assets/glb/riders/provenance.json",
+      "acquisitionDate": "2026-08-12",
+      "sha256": "27934279dd414875d854ee479178241d6b7da3c5b3c6e2e77fae1dde7ab5756f",
+      "copyrightHolder": "Tidal Racer project",
+      "requiredRig": "characterRig"
+    },
+    {
+      "id": "rider-ren-hero",
+      "category": "rider",
+      "url": "./assets/glb/riders/ren-lod0.glb",
+      "enabled": true,
+      "scale": 1,
+      "source": "tidal-racer-project-authored",
+      "license": "Project-authored original asset",
+      "licenseUrl": "./assets/glb/riders/provenance.json",
+      "acquisitionDate": "2026-08-12",
+      "sha256": "75f3192f29003421b26e0d7eeb57824befa1d5f93a567a46fc66d50a10caabd5",
+      "copyrightHolder": "Tidal Racer project",
+      "requiredRig": "characterRig"
+    },
+    {
+      "id": "rider-luz-hero",
+      "category": "rider",
+      "url": "./assets/glb/riders/luz-lod0.glb",
+      "enabled": true,
+      "scale": 1,
+      "source": "tidal-racer-project-authored",
+      "license": "Project-authored original asset",
+      "licenseUrl": "./assets/glb/riders/provenance.json",
+      "acquisitionDate": "2026-08-12",
+      "sha256": "059de55a459de7925799b4710fe5b4beff55510b5659c711887deeacadab2eb2",
+      "copyrightHolder": "Tidal Racer project",
+      "requiredRig": "characterRig"
+    },
+    {
+      "id": "rider-haneul-hero",
+      "category": "rider",
+      "url": "./assets/glb/riders/haneul-lod0.glb",
+      "enabled": true,
+      "scale": 1,
+      "source": "tidal-racer-project-authored",
+      "license": "Project-authored original asset",
+      "licenseUrl": "./assets/glb/riders/provenance.json",
+      "acquisitionDate": "2026-08-12",
+      "sha256": "f9c5b7487e5852cc1680ba0972a734ccde4df5b620c08e4c53c8ad2bad271f30",
+      "copyrightHolder": "Tidal Racer project",
+      "requiredRig": "characterRig"
+    },
+    {
+      "id": "rider-mako-hero",
+      "category": "rider",
+      "url": "./assets/glb/riders/mako-lod0.glb",
+      "enabled": true,
+      "scale": 1,
+      "source": "tidal-racer-project-authored",
+      "license": "Project-authored original asset",
+      "licenseUrl": "./assets/glb/riders/provenance.json",
+      "acquisitionDate": "2026-08-12",
+      "sha256": "800705c6f1e95023b9d33352e4c8b9504531d1aaacb2a92bf3c873331379fa03",
+      "copyrightHolder": "Tidal Racer project",
+      "requiredRig": "characterRig"
+    },
+    {
+      "id": "rider-ivy-hero",
+      "category": "rider",
+      "url": "./assets/glb/riders/ivy-lod0.glb",
+      "enabled": true,
+      "scale": 1,
+      "source": "tidal-racer-project-authored",
+      "license": "Project-authored original asset",
+      "licenseUrl": "./assets/glb/riders/provenance.json",
+      "acquisitionDate": "2026-08-12",
+      "sha256": "955a709e2943f17029cbb259d6b5f45da83cd3ce4788379adb6c6e1ff74e4323",
+      "copyrightHolder": "Tidal Racer project",
+      "requiredRig": "characterRig"
+    },
+    {
+      "id": "rider-zane-hero",
+      "category": "rider",
+      "url": "./assets/glb/riders/zane-lod0.glb",
+      "enabled": true,
+      "scale": 1,
+      "source": "tidal-racer-project-authored",
+      "license": "Project-authored original asset",
+      "licenseUrl": "./assets/glb/riders/provenance.json",
+      "acquisitionDate": "2026-08-12",
+      "sha256": "a911df3732c8cef324397afd2c075219ee94907163bbcb4654f3587a1d33e55f",
+      "copyrightHolder": "Tidal Racer project",
+      "requiredRig": "characterRig"
+    }
+  ],
+  "targetVersion": "V18",
+  "characterRig": {
+    "heroLod": "LOD0",
+    "rivalLod": "LOD1",
+    "distantLod": "LOD2",
+    "requiredBones": [
+      "root",
+      "pelvis",
+      "spine",
+      "chest",
+      "neck",
+      "head",
+      "upperArm.L",
+      "foreArm.L",
+      "hand.L",
+      "upperArm.R",
+      "foreArm.R",
+      "hand.R",
+      "upperLeg.L",
+      "lowerLeg.L",
+      "boot.L",
+      "upperLeg.R",
+      "lowerLeg.R",
+      "boot.R"
+    ],
+    "requiredAnimations": [
+      "menu-idle",
+      "ride",
+      "hard-turn",
+      "drift",
+      "boost",
+      "landing",
+      "victory"
+    ],
+    "fallback": "v18 project-authored anatomical wet-gear v5 articulated rig"
+  },
+  "runtime": {
+    "loading": "deferred-after-first-frame",
+    "productionLoaders": "dynamic-import-when-enabled"
+  }
+}

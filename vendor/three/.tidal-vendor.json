@@ -1,0 +1,10 @@
+{
+  "name": "three",
+  "version": "0.185.0",
+  "installedAt": "2026-08-11T16:49:23+0900",
+  "source": "official npm package or compatible registry mirror",
+  "scope": [
+    "build",
+    "examples/jsm"
+  ]
+}

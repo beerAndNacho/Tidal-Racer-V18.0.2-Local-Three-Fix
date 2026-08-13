@@ -1,0 +1,129 @@
+{
+  "product": "Tidal Racer",
+  "version": "18.0.2",
+  "generatedAt": "2026-08-13T10:49:19.151Z",
+  "saleReady": false,
+  "summary": {
+    "passed": 14,
+    "failed": 3,
+    "blockers": 3,
+    "warnings": 0
+  },
+  "checks": [
+    {
+      "id": "required-files",
+      "ok": true,
+      "severity": "blocker",
+      "evidence": "21 required files present"
+    },
+    {
+      "id": "three-runtime-license",
+      "ok": true,
+      "severity": "blocker",
+      "evidence": "three=0.185.0; license=true"
+    },
+    {
+      "id": "no-remote-runtime",
+      "ok": true,
+      "severity": "blocker",
+      "evidence": "all executable/runtime references are local"
+    },
+    {
+      "id": "referenced-assets-exist",
+      "ok": true,
+      "severity": "blocker",
+      "evidence": "26 literal asset references resolved"
+    },
+    {
+      "id": "enabled-assets-provenance",
+      "ok": true,
+      "severity": "blocker",
+      "evidence": "16 enabled manifest assets verified with matching hashes"
+    },
+    {
+      "id": "premium-rider-lod0",
+      "ok": true,
+      "severity": "blocker",
+      "evidence": "16/16 enabled rider LOD0 files; 0 invalid rigs"
+    },
+    {
+      "id": "premium-rider-runtime",
+      "ok": true,
+      "severity": "blocker",
+      "evidence": "skinned clone, authored clips, crossfade upgrade and procedural fallback are integrated"
+    },
+    {
+      "id": "polyhaven-provenance",
+      "ok": true,
+      "severity": "blocker",
+      "evidence": "9/9 hashes; license=CC0"
+    },
+    {
+      "id": "generated-texture-provenance",
+      "ok": true,
+      "severity": "blocker",
+      "evidence": "4/4 generated texture hashes and sources verified"
+    },
+    {
+      "id": "third-party-notices",
+      "ok": true,
+      "severity": "blocker",
+      "evidence": "Poly Haven and Three.js notices required"
+    },
+    {
+      "id": "publisher-identity",
+      "ok": false,
+      "severity": "blocker",
+      "evidence": "release/publisher.json is missing or contains placeholders"
+    },
+    {
+      "id": "commercial-legal-approval",
+      "ok": false,
+      "severity": "blocker",
+      "evidence": {
+        "missingLegal": [
+          "release/EULA.md",
+          "release/PRIVACY.md",
+          "release/SUPPORT_POLICY.md"
+        ],
+        "unapprovedLegal": [],
+        "approval": "release/commercial-approval.json missing or incomplete"
+      }
+    },
+    {
+      "id": "no-source-art-leaks",
+      "ok": true,
+      "severity": "blocker",
+      "evidence": "no forbidden source-art files"
+    },
+    {
+      "id": "package-size-budget",
+      "ok": true,
+      "severity": "blocker",
+      "evidence": "99.04 MiB / 100 MiB"
+    },
+    {
+      "id": "automated-regression",
+      "ok": true,
+      "severity": "blocker",
+      "evidence": "34/34 suites passed"
+    },
+    {
+      "id": "manual-browser-matrix",
+      "ok": false,
+      "severity": "blocker",
+      "evidence": [
+        "Chrome: missing session",
+        "Edge: missing session",
+        "Firefox: missing session",
+        "integrated-GPU session missing"
+      ]
+    },
+    {
+      "id": "accessibility-settings",
+      "ok": true,
+      "severity": "blocker",
+      "evidence": "audio mixer, remapping, captions, reduced effects and high contrast are implemented"
+    }
+  ]
+}

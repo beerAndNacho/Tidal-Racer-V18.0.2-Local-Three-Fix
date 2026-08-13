@@ -1,0 +1,30 @@
+# Generated release packages (published separately as GitHub Release assets)
+release/builds/
+
+# Source art and local authoring files are not required to run the game
+art-source/
+
+# Local caches and temporary diagnostics
+__pycache__/
+*.py[cod]
+tmp_*.log
+*_stdout.log
+*_stderr.log
+
+# Local publishing helpers and downloaded archives
+_git_publish/
+vendor-cache/
+three-*.tgz
+push_to_github.bat
+
+# Generated local reports (the canonical audit is release/RELEASE_AUDIT.json)
+FINAL_REGRESSION_LOG.txt
+TEST_REPORT_V18.0.2.txt
+PACKAGE_MANIFEST.json
+PRODUCT_SCORECARD.md
+
+# OS / editor noise
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/

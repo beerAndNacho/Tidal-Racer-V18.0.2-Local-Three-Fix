@@ -1,0 +1,31 @@
+import fs from 'node:fs';
+
+const life=fs.readFileSync('v18/city-life-system.js','utf8'),main=fs.readFileSync('v18/main.js','utf8'),index=fs.readFileSync('index.html','utf8'),policy=JSON.parse(fs.readFileSync('release/release-policy.json','utf8')),tests=[],add=(name,ok)=>tests.push({name,ok:Boolean(ok)});
+const facilityIds=['home','grocery','restaurant','bank','nightlife','gym'];
+const core=life.slice(life.indexOf('const clamp='),life.indexOf('function physical(')).replaceAll('export ','');
+const {CityLifeDirector:TestLife}=new Function(`${core};return {CityLifeDirector};`)();
+add('six grounded city facilities are authored',facilityIds.every(id=>life.includes(`id:'${id}'`))&&(life.match(/exterior:\{x:/g)||[]).length===6);
+add('dismount and boarding require the Golden Coast dock',life.includes('canDisembark')&&life.includes('disembarkRadius')&&life.includes('canBoard')&&main.includes('toggleOnFoot'));
+add('keyboard and gamepad expose on-foot actions',main.includes("e.code==='KeyX'")&&main.includes("e.code==='KeyE'")&&main.includes("event.action==='item'")&&main.includes('handleLifeInteraction'));
+add('arrow and WASD controls drive walking physics',main.includes('function updateOnFoot(dt)')&&main.includes('liveControls.throttle-liveControls.brake')&&main.includes('heading-=turn*2.45'));
+add('premium GLB rider is reused on foot',main.includes('assets.spawn(assetId)')&&main.includes('prepareFootAvatar')&&main.includes('animateFootAvatar'));
+add('late premium loading cannot duplicate the rider on the parked craft',main.includes("if(cityLife.mode!=='water')mountedRiderVisible(false)"));
+add('real interiors and contextual doors exist',life.includes('furnishInterior')&&life.includes('city-life-interior-')&&life.includes("kind:'enter'")&&life.includes("kind:'exit'"));
+add('home supports sleep shower cooking and downtime',['sleep','shower','home_meal','watch_tv'].every(id=>life.includes(`'${id}'`)));
+add('restaurant and grocery affect hunger and energy',['breakfast','seafood_bowl','chef_course','groceries','coffee'].every(id=>life.includes(`'${id}'`)));
+add('bank protects wallet and account balances',life.includes("deposit_1000")&&life.includes("withdraw_5000")&&life.includes("reason:'wallet'")&&life.includes("reason:'bank'"));
+add('nightlife and fitness provide safe leisure loops',['live_music','dance','arcade','mocktail','cardio','strength','stretch'].every(id=>life.includes(`'${id}'`)));
+add('needs time banking visits and activities persist',life.includes('serialize()')&&life.includes('worldHour')&&life.includes('bankBalance')&&main.includes('life:cityLife.serialize()')&&main.includes('cityLife.restore(p.life)'));
+add('life clock drives the physical sun and exposure',life.includes('tickClock(dt)')&&main.includes('cityLife.tickClock(dt)')&&main.includes('const elevation=-7+')&&main.includes('dataset.worldTime'));
+add('city life HUD exposes needs clock bank and action modal',['lifeHud','lifeClock','lifeBank','lifeEnergy','lifeHunger','lifeMood','lifeHygiene','lifePanel','lifeActionList'].every(id=>index.includes(`id="${id}"`)));
+add('release package requires the city life module',policy.requiredFiles.includes('v18/city-life-system.js')&&policy.sourceFiles.includes('v18/city-life-system.js'));
+const simulation=new TestLife(),fastRejected=!simulation.canDisembark({x:230,z:523,speed:7}),dockAccepted=simulation.canDisembark({x:230,z:523,speed:0}),dismounted=simulation.disembark({x:230,z:523,speed:0});
+add('runtime model rejects unsafe speed and accepts a stopped dock approach',fastRejected&&dockAccepted&&dismounted.ok&&simulation.mode==='foot');
+simulation.enter('restaurant');const meal=simulation.perform('seafood_bowl',1000);
+add('restaurant transaction charges wallet and restores needs',meal.ok&&meal.wallet===220&&meal.profile.hunger>82&&meal.profile.mood>76);
+simulation.leave();simulation.enter('bank');const deposit=simulation.perform('deposit_5000',6000),withdraw=simulation.perform('withdraw_5000',deposit.wallet);
+add('bank transfers conserve wallet and account funds',deposit.ok&&deposit.wallet===1000&&deposit.bankBalance===10000&&withdraw.ok&&withdraw.wallet===6000&&withdraw.bankBalance===5000);
+const restored=new TestLife(simulation.serialize());
+add('life profile round-trips through save data',restored.profile.bankBalance===simulation.profile.bankBalance&&restored.profile.worldHour===simulation.profile.worldHour&&restored.profile.activities.withdraw_5000===1);
+
+let failed=0;for(const test of tests){console.log(`${test.ok?'PASS':'FAIL'} ${test.name}`);if(!test.ok)failed++}console.log(`\n${tests.length-failed}/${tests.length} V18 city life checks PASS`);process.exit(failed?1:0);
