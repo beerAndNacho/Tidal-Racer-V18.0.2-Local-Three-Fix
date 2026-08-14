@@ -8,7 +8,8 @@ import { collectThreeRuntimeFiles } from './three-runtime-files.mjs';
 const root=process.cwd(),preview=process.argv.includes('--preview'),policy=JSON.parse(fs.readFileSync(path.join(root,'release/release-policy.json'),'utf8'));
 const audit=runReleaseAudit({runTests:true,write:true});
 if(!audit.saleReady&&!preview){
-  const blocked=audit.checks.filter(check=>check.severity==='blocker'&&!check.ok).map(check=>`- ${check.id}: ${check.evidence}`).join('\n');
+  const formatEvidence=evidence=>typeof evidence==='string'?evidence:JSON.stringify(evidence);
+  const blocked=audit.checks.filter(check=>check.severity==='blocker'&&!check.ok).map(check=>`- ${check.id}: ${formatEvidence(check.evidence)}`).join('\n');
   console.error(`COMMERCIAL BUILD BLOCKED\n${blocked}\n\nUse --preview only for internal QA.`);
   process.exit(2);
 }
@@ -18,7 +19,7 @@ const output=path.join(root,'release','builds',`tidal-racer-${safeVersion}-${cha
 if(fs.existsSync(output))throw new Error(`Refusing to overwrite existing build: ${output}`);
 fs.mkdirSync(output,{recursive:true});
 
-const files=['index.html','data-v12.js','systems-v13.js','README.md','README_LOCAL.txt','LICENSE','SECURITY.md','run_local.bat','run_local.sh','serve_local.ps1','prepare_vendor.py','serve_local.py','docs/PRESS_KIT.md','docs/promo/THREADS_KO.md','docs/promo/THREADS_CAMPAIGN_KO.md','docs/promo/PROVENANCE.md','docs/promo/tidal-racer-launch-key-art.png'];
+const files=['index.html','data-v12.js','systems-v13.js','README.md','README_LOCAL.txt','LICENSE','SECURITY.md','run_local.bat','run_local.sh','serve_local.ps1','prepare_vendor.py','serve_local.py','docs/PRESS_KIT.md','docs/PLAYTEST_PROTOCOL.md','docs/promo/THREADS_KO.md','docs/promo/THREADS_CAMPAIGN_KO.md','docs/promo/PROVENANCE.md','docs/promo/tidal-racer-launch-key-art.png'];
 const folders=['assets','v18','v16','v17'];
 const threeRuntimeFiles=collectThreeRuntimeFiles(root),extraFiles=['v14/audio-director.js',...threeRuntimeFiles];
 const copyFile=relative=>{const source=path.join(root,relative),target=path.join(output,relative);if(!fs.existsSync(source))throw new Error(`Missing package input: ${relative}`);fs.mkdirSync(path.dirname(target),{recursive:true});fs.copyFileSync(source,target)};

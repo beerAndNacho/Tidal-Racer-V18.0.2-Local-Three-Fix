@@ -15,6 +15,8 @@ jobs:
         run: node scripts/public-release-check.mjs
       - name: Legal data-flow consistency
         run: node scripts/legal-data-flow-check.mjs
+      - name: Signed local playtest evidence recorder
+        run: node scripts/v18-playtest-evidence-check.mjs
       - name: V18 loading and streaming
         run: node scripts/v18-loading-check.mjs
       - name: Local launcher and runtime

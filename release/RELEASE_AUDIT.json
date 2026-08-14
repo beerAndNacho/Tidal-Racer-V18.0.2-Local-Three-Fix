@@ -1,7 +1,7 @@
 {
   "product": "Tidal Racer",
   "version": "18.0.2",
-  "generatedAt": "2026-08-14T00:41:36.723Z",
+  "generatedAt": "2026-08-14T01:05:46.764Z",
   "saleReady": false,
   "summary": {
     "passed": 14,
@@ -14,7 +14,7 @@
       "id": "required-files",
       "ok": true,
       "severity": "blocker",
-      "evidence": "44 required files present"
+      "evidence": "45 required files present"
     },
     {
       "id": "three-runtime-license",
@@ -100,22 +100,24 @@
       "id": "package-size-budget",
       "ok": true,
       "severity": "blocker",
-      "evidence": "86.87 MiB / 100 MiB · dependency-closed Three.js runtime"
+      "evidence": "86.88 MiB / 100 MiB · dependency-closed Three.js runtime"
     },
     {
       "id": "automated-regression",
       "ok": true,
       "severity": "blocker",
-      "evidence": "110/110 suites passed"
+      "evidence": "111/111 suites passed"
     },
     {
       "id": "manual-browser-matrix",
       "ok": false,
       "severity": "blocker",
       "evidence": [
-        "Chrome: missing session",
-        "Edge: missing session",
-        "Firefox: missing session",
+        "matrix requires exactly 3 sessions",
+        "matrix requires exactly 3 source evidence hashes",
+        "Chrome: requires exactly one session",
+        "Edge: requires exactly one session",
+        "Firefox: requires exactly one session",
         "integrated-GPU session missing"
       ]
     },

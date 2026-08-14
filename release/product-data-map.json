@@ -34,7 +34,8 @@
   ],
   "userInitiatedExports": [
     {"format": "JSON", "purpose": "save backup and import"},
-    {"format": "PNG", "purpose": "photo mode capture"}
+    {"format": "PNG", "purpose": "photo mode capture"},
+    {"format": "JSON", "purpose": "optional F10 release playtest evidence containing tester-entered name, typed signature, notes, browser, OS, GPU, performance metrics, manual verification flags, runtime errors, and session SHA-256"}
   ],
   "deletion": [
     "Use the in-game save slot reset for progression data.",

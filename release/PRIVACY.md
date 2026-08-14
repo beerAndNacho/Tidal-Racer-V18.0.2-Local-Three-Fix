@@ -45,13 +45,22 @@ Photo Mode writes a PNG image. These files remain under the user's operating
 system control. Import reads only the JSON file the user explicitly selects.
 The game does not automatically upload either file.
 
+The optional F10 release-testing recorder creates a separate JSON file only
+after the tester starts a session and selects Export. It can contain the
+tester-entered name, typed confirmation signature, notes, browser, operating
+system, GPU, boot and frame measurements, manual verification flags, and
+runtime error messages. It is not stored or transmitted by the game. A tester
+chooses whether and how to provide that file to the publisher. Testers should
+not enter unrelated personal or sensitive information.
+
 ## 4. Deletion and retention
 
 The game retains browser data until the user resets a slot, clears the local
 origin's site data, replaces it through import, or removes the browser profile.
 Reset archives may remain locally to support recovery. Clearing all site data
 for the local Tidal Racer origin removes browser-stored game data. Exported
-JSON and PNG files must be deleted separately through the operating system.
+JSON and PNG files, including optional QA evidence, must be deleted separately
+through the operating system.
 
 ## 5. External services
 

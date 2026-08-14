@@ -1,6 +1,11 @@
 {
   "version": 1,
   "productVersion": "18.0.2",
+  "sourceEvidence": [
+    {"browser": "Chrome", "sessionSha256": "REPLACE_WITH_F10_EXPORT_SHA256"},
+    {"browser": "Edge", "sessionSha256": "REPLACE_WITH_F10_EXPORT_SHA256"},
+    {"browser": "Firefox", "sessionSha256": "REPLACE_WITH_F10_EXPORT_SHA256"}
+  ],
   "sessions": [
     {
       "browser": "Chrome",

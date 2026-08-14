@@ -398,6 +398,12 @@ JavaScript modules and game assets.
 Standard Xbox/PlayStation-compatible gamepads are supported. Keyboard and
 gamepad can be switched at any time.
 
+Release testers can press `F10` to open the local evidence recorder. It
+measures active-play frame p50/p95, boot time, and runtime errors without
+network transmission; a signed JSON export remains locked until 30 active
+minutes and all save, control, gamepad, accessibility, fishing/activity,
+browser-version, and GPU gates pass.
+
 ## Feedback that helps most
 
 If you enjoy the direction, a GitHub star makes the project easier to discover.

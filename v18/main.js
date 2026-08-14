@@ -34,6 +34,7 @@ import { NavigationDirector } from './navigation-system.js';
 import { craftDriveForces, hullReentryImpact } from './craft-dynamics-system.js';
 import { HarborArcadeDirector, HARBOR_ARCADE_RULES } from './harbor-arcade-system.js';
 import { NightlifeRhythmDirector, NIGHTLIFE_RHYTHM_RULES, NIGHTLIFE_RHYTHM_DIRECTIONS } from './nightlife-rhythm-system.js';
+import { PlaytestEvidenceDirector, detectPlaytestBrowser, detectPlaytestOs } from './playtest-evidence-system.js';
 
 const $=s=>document.querySelector(s),clamp=THREE.MathUtils.clamp,lerp=THREE.MathUtils.lerp;
 const riderPortraitUrl=id=>`./assets/portraits/rider-${id}-portrait-v1.webp`;
@@ -113,6 +114,41 @@ let totalPlaySeconds=0,saveRecovered=false,saveUiTimer=0;
 const photoKeys={};let photoPad={steer:0,throttle:0,brake:0},photoCapturePending=false,photoCaptureBusy=false;
 let worldMapOpen=false,mapPointer=null,mapMoved=false,raceEventMenuOpen=false,raceResultOpen=false;
 const performanceGovernor=new PerformanceGovernor({renderer,composer,quality:STATE.quality,basePixelRatio:Math.min(devicePixelRatio,2),targetFps:55});
+const playtestEvidence=new PlaytestEvidenceDirector();
+const qaDetected={...detectPlaytestBrowser(navigator.userAgent),os:detectPlaytestOs(navigator.userAgent,navigator.platform)};
+let qaGpu='Unknown',qaUiTick=0;
+
+function webglRendererInfo(){
+  try{const gl=renderer.getContext(),extension=gl.getExtension('WEBGL_debug_renderer_info');return extension?String(gl.getParameter(extension.UNMASKED_RENDERER_WEBGL)||'Unknown'):String(gl.getParameter(gl.RENDERER)||'Unknown')}catch{return'Unknown'}
+}
+function qaIdentity(){
+  return{...qaDetected,os:$('#qaOs')?.value.trim()||qaDetected.os,gpu:$('#qaGpu')?.value.trim()||qaGpu,gpuClass:$('#qaGpuClass')?.value||'unconfirmed',tester:$('#qaTester')?.value.trim()||'',signature:$('#qaSignature')?.value.trim()||'',notes:$('#qaNotes')?.value||''};
+}
+function renderQaPanel(){
+  const snapshot=playtestEvidence.snapshot(),gate=playtestEvidence.readiness(qaIdentity()),panel=$('#qaPanel');if(!panel)return;
+  $('#qaDuration').textContent=`${snapshot.durationMinutes.toFixed(2)} M`;$('#qaBoot').textContent=`${snapshot.bootSeconds.toFixed(3)} S`;$('#qaP50').textContent=`${snapshot.p50FrameMs.toFixed(1)} MS`;$('#qaP95').textContent=`${snapshot.p95FrameMs.toFixed(1)} MS`;
+  const status=$('#qaStatus');status.dataset.ready=String(gate.ready);status.textContent=gate.ready?'ALL GATES PASS · SIGNED EVIDENCE READY':`${snapshot.active?'RECORDING':'NOT RECORDING'} · ${gate.missing.join(' · ')}`;$('#qaExport').disabled=!gate.ready;$('#qaStart').textContent=snapshot.active?'RESTART CLEAN SESSION':'BEGIN CLEAN SESSION';
+  document.body.dataset.qaRecording=snapshot.active?'true':'false';document.body.dataset.qaDuration=snapshot.durationMinutes.toFixed(2);document.body.dataset.qaP95=snapshot.p95FrameMs.toFixed(1);document.body.dataset.qaErrors=String(snapshot.crashes);
+}
+function toggleQaPanel(force){
+  const panel=$('#qaPanel');if(!panel)return;const open=force??panel.classList.contains('hidden');panel.classList.toggle('hidden',!open);if(open){qaGpu=webglRendererInfo();$('#qaBrowser').value=`${qaDetected.browser} ${qaDetected.browserVersion}`;$('#qaGpu').value=qaGpu;$('#qaOs').value=qaDetected.os;renderQaPanel()}
+}
+async function exportQaEvidence(){
+  const evidence=playtestEvidence.evidence(qaIdentity());if(!evidence.validation.ready){renderQaPanel();return}
+  const session=evidence.sessions[0],digest=await crypto.subtle.digest('SHA-256',new TextEncoder().encode(JSON.stringify(session))),sessionSha256=[...new Uint8Array(digest)].map(byte=>byte.toString(16).padStart(2,'0')).join('');evidence.integrity={algorithm:'SHA-256',sessionSha256};
+  const blob=new Blob([JSON.stringify(evidence,null,2)+'\n'],{type:'application/json'}),url=URL.createObjectURL(blob),link=document.createElement('a');link.href=url;link.download=`tidal-racer-playtest-${session.browser.toLowerCase()}-${new Date().toISOString().slice(0,10)}.json`;document.body.appendChild(link);link.click();link.remove();setTimeout(()=>URL.revokeObjectURL(url),1200);renderQaPanel()
+}
+function beginQaSession(){
+  playtestEvidence.start();document.querySelectorAll('[data-qa-check]').forEach(input=>{input.checked=false});renderQaPanel()
+}
+$('#qaClose')?.addEventListener('click',()=>toggleQaPanel(false));
+$('#qaStart')?.addEventListener('click',beginQaSession);
+$('#qaExport')?.addEventListener('click',()=>void exportQaEvidence().catch(error=>{playtestEvidence.recordError('evidence-export',error?.message||error);renderQaPanel()}));
+document.querySelectorAll('[data-qa-check]').forEach(input=>input.addEventListener('change',()=>{playtestEvidence.setCheck(input.dataset.qaCheck,input.checked);renderQaPanel()}));
+for(const id of['qaTester','qaSignature','qaOs','qaGpu','qaGpuClass','qaNotes'])$('#'+id)?.addEventListener('input',renderQaPanel);
+addEventListener('keydown',event=>{if(event.code==='F10'&&!event.repeat){event.preventDefault();toggleQaPanel()}},true);
+addEventListener('error',event=>playtestEvidence.recordError('error',event.message||event.error?.message));
+addEventListener('unhandledrejection',event=>playtestEvidence.recordError('unhandledrejection',event.reason?.message||event.reason));
 
 function saveAccessibility(){try{localStorage.setItem(ACCESS_KEY,JSON.stringify({accessibility,controls:controlBindings}))}catch{}}
 function applyAccessibility(){document.body.classList.toggle('reduced-effects',accessibility.reducedEffects);document.body.classList.toggle('high-contrast',accessibility.highContrast);document.body.dataset.captions=accessibility.captions?'on':'off';document.body.dataset.reducedEffects=accessibility.reducedEffects?'on':'off';document.body.dataset.highContrast=accessibility.highContrast?'on':'off'}
@@ -1136,7 +1172,7 @@ function startGame(){if(STATE.started)return;void audioDirector.unlock();while(c
 $('#startBtn').onclick=startGame;
 let last=performance.now(),saveTick=0,sceneStatsTick=0,careerTick=0,harborTick=0,firstFrame=true;
 function frame(now){
-  requestAnimationFrame(frame);const rawDt=Math.min(.033,(now-last)/1000);last=now;if(!STATE.paused)STATE.time+=rawDt;if(STATE.started&&!STATE.paused)totalPlaySeconds+=rawDt;updateInput();const dt=STATE.paused?0:rawDt;
+  requestAnimationFrame(frame);const measuredFrameDt=Math.min(.5,(now-last)/1000),rawDt=Math.min(.033,measuredFrameDt);last=now;playtestEvidence.recordFrame(measuredFrameDt,STATE.started&&!STATE.paused);qaUiTick+=measuredFrameDt;if(qaUiTick>.25&&playtestEvidence.active){qaUiTick=0;renderQaPanel()}if(!STATE.paused)STATE.time+=rawDt;if(STATE.started&&!STATE.paused)totalPlaySeconds+=rawDt;updateInput();const dt=STATE.paused?0:rawDt;
   if(STATE.started){
     if(!STATE.paused){if(cityLife.mode==='water'){updatePhysics(dt);if(!fishing.active){updateRace(dt);updateItems(dt)}updateFishing(dt);updateWorldActivity(dt)}else updateOnFoot(dt);updateSkills();updateCamera();updateWorld(dt);updateArcadeChallenge(dt);updateNightlifeRhythm(dt);updateOnboarding(dt);drawMap();
       const tuned=effectiveCraft();$('#speed').textContent=cityLife.mode==='water'?Math.round(Math.abs(speed)*3.6):Math.round(Math.abs(footMotionSpeed)*3.6);$('#rpm').textContent=cityLife.mode==='water'?Math.round(1800+Math.abs(speed)/Math.max(1,tuned.max)*7600):'WALK';$('#boostFill').style.width=(cityLife.mode==='water'?STATE.boost:cityLife.profile.energy)+'%';const conditionHud=$('#craftCondition');if(conditionHud){conditionHud.textContent=`${Math.round(tuned.condition)}%`;conditionHud.dataset.state=tuned.condition<=25?'critical':tuned.condition<=55?'service':'ready'}
@@ -1149,11 +1185,11 @@ function frame(now){
   renderer.info.reset();composer.render();capturePhotoFrame();performanceGovernor.sample(rawDt,STATE.started&&!STATE.paused);
   if(firstFrame){
     firstFrame=false;boot(100,'ready','Menu ready — world continues streaming');
-    window.__tidalBoot?.ready?.({bootMs:performance.now()-bootStarted});
+    const bootMs=performance.now()-bootStarted;playtestEvidence.markBootComplete(bootMs);window.__tidalBoot?.ready?.({bootMs});
     idle(()=>{scheduleCompetitorStreaming();scheduleWorldStreaming();scheduleGameplayStreaming();deferEnvironmentMap();deferAssetManifest()},350);
   }
 }
-const runtimeHandle={STATE,get save(){return{activeSlot:saveSlots.activeSlot,slots:saveSlots.listSlots(),playSeconds:totalPlaySeconds,recovered:saveRecovered}},get onboarding(){return onboarding.snapshot()},get photo(){return photoMode.snapshot()},get navigation(){return{...navigation.snapshot(navigationPosition()),mapOpen:worldMapOpen}},get rider(){return rider},get craft(){return effectiveCraft()},get workshop(){return workshop.snapshot()},get story(){return storyMissions.snapshot()},get player(){return player},get onFootPlayer(){return footAvatar},get heading(){return heading},get speed(){return cityLife.mode==='water'?speed:footMotionSpeed},get controls(){return {...liveControls,device:lastInputDevice,keyboard:{...keys}}},get gamepad(){return gamepadDirector.snapshot()},get race(){return{...rivalRace.snapshot(STATE.time),championship:raceEvents.snapshot(STATE.reputation),course:raceCourse.snapshot(),eventMenuOpen:raceEventMenuOpen,resultOpen:raceResultOpen}},get fishing(){return fishing.snapshot()},get fishery(){return fishery.snapshot(harborClock())},get career(){return career.snapshot(careerMetrics())},get activity(){return worldActivities.snapshot({x:px,z:pz,time:STATE.time})},get life(){return cityLife.snapshot()},get seaState(){return currentSeaState()},get streaming(){return{...streamingState(),rivals:competitors.length}},get performance(){return performanceGovernor.snapshot()},get scene(){return sceneDiagnostics()},bootStarted};
+const runtimeHandle={STATE,get save(){return{activeSlot:saveSlots.activeSlot,slots:saveSlots.listSlots(),playSeconds:totalPlaySeconds,recovered:saveRecovered}},get onboarding(){return onboarding.snapshot()},get photo(){return photoMode.snapshot()},get navigation(){return{...navigation.snapshot(navigationPosition()),mapOpen:worldMapOpen}},get rider(){return rider},get craft(){return effectiveCraft()},get workshop(){return workshop.snapshot()},get story(){return storyMissions.snapshot()},get player(){return player},get onFootPlayer(){return footAvatar},get heading(){return heading},get speed(){return cityLife.mode==='water'?speed:footMotionSpeed},get controls(){return {...liveControls,device:lastInputDevice,keyboard:{...keys}}},get gamepad(){return gamepadDirector.snapshot()},get race(){return{...rivalRace.snapshot(STATE.time),championship:raceEvents.snapshot(STATE.reputation),course:raceCourse.snapshot(),eventMenuOpen:raceEventMenuOpen,resultOpen:raceResultOpen}},get fishing(){return fishing.snapshot()},get fishery(){return fishery.snapshot(harborClock())},get career(){return career.snapshot(careerMetrics())},get activity(){return worldActivities.snapshot({x:px,z:pz,time:STATE.time})},get life(){return cityLife.snapshot()},get qa(){return playtestEvidence.snapshot()},get seaState(){return currentSeaState()},get streaming(){return{...streamingState(),rivals:competitors.length}},get performance(){return performanceGovernor.snapshot()},get scene(){return sceneDiagnostics()},bootStarted};
 window.__tidalV18=runtimeHandle;window.__tidalV16=runtimeHandle;
 const V18_IDENTITY={
   ko:{title:'Tidal Racer V18 — Fast Boot / 한국어 / English',eyebrow:'V18 · FAST BOOT · 한국어 / ENGLISH · WORLD STREAMING',hero:'필수 엔진과 Golden Coast를 먼저 표시하고, 나머지 해역·라이벌·환경 자원을 작은 배치로 나눠 뒤에서 스트리밍한다. 기존 한국어/영어, 거친 파도, 캐릭터, 적응형 오디오 기능은 그대로 유지한다.'},

@@ -26,6 +26,7 @@ node scripts/build-release.mjs
 
 ## Technical gate
 
+- Follow `docs/PLAYTEST_PROTOCOL.md` for the exact F10 session procedure and five manual gates.
 - All automated suites must pass from a clean checkout.
 - Confirm every V4 regional landmark streams correctly and Golden Coast remains within the draw-call/triangle budget at the default spawn.
 - Verify the full 12-craft starting grid, 3-2-1-GO lock, three-lap rank tracking, contact cooldown, slipstream, pack catch-up and race completion rewards.
@@ -34,6 +35,7 @@ node scripts/build-release.mjs
 - Verify keyboard remapping, audio sliders, subtitles and photosensitivity/accessibility settings before release.
 - On each browser target, verify a physical standard gamepad: hot-plug/reconnect, analog steering, both triggers, every mapped action, fishing controls, deadzone/sensitivity persistence, and vibration where supported.
 - Copy `release/playtest-matrix.example.json` to `release/playtest-matrix.json`, enter measured results, and have each tester sign their session. The audit rejects placeholders, sessions under 30 minutes, crashes, p95 frame time above 40 ms, missing integrated-GPU coverage, and incomplete save/control/gamepad/accessibility/gameplay checks.
+- Preferred evidence flow: launch the game, press F10, confirm the detected GPU and GPU class, begin a clean session, actively play for 30 minutes, complete all five manual checks, type the tester name and signature, and export the locked JSON. Repeat in Chrome, Edge, and Firefox, then run `node scripts/merge-playtest-evidence.mjs chrome.json edge.json firefox.json --output release/playtest-matrix.json`. The merger refuses duplicate, unsigned, short, slow, errored, outdated-browser, or all-discrete evidence.
 - Build only with `scripts/build-release.mjs`; it emits a fresh SHA-256 content manifest.
 
 ## License gate

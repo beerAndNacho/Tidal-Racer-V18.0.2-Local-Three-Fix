@@ -21,6 +21,7 @@ add('runtime fetches are limited to boot and local manifest',sourceFiles.filter(
 for(const key of ['tidal-racer-v18-save-meta','tidal-racer-v18-save-slot','tidal-racer-v13-profile','tidal-racer-audio-settings','tidal-racer-accessibility-v1','tidal-racer-gamepad-v1','tidal-racer-language'])add('documented storage key '+key,source.includes(key),key);
 add('save JSON export and import are implemented',source.includes("format:'tidal-racer-save'")&&source.includes('saveSlots.importSlot')&&source.includes("type:'application/json'"));
 add('photo PNG export is implemented',source.includes('link.download=filename')&&source.includes("},'image/png')"));
+add('optional QA identity export is disclosed',source.includes('qaSignature')&&source.includes('sessionSha256')&&privacy.includes('optional F10 release-testing recorder')&&privacy.includes('typed confirmation signature'));
 add('privacy notice matches no-account local model',/does not\s+require an account/.test(privacy)&&/does not\s+send gameplay telemetry/.test(privacy)&&privacy.includes('127.0.0.1'));
 add('privacy notice covers local data and deletion',privacy.includes('three save slots')&&privacy.includes('site data')&&/Exported\s+JSON and PNG/.test(privacy));
 add('external GitHub and storefront surfaces separated',privacy.includes('governed by GitHub')&&privacy.includes('future commercial storefront'));
