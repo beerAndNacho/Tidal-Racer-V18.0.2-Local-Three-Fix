@@ -551,7 +551,7 @@ function leaveLifeFacility(){
 }
 function toggleOnFoot(){
   if(!STATE.started||lifeSequence||dockTransition)return;
-  if(cityDelivery.active)return toast('COAST COURIER · FINISH OR PRESS J TO CANCEL THE ROUTE');
+  if(cityDelivery.active)return toast('COAST COURIER · FINISH OR PRESS J / Y TO CANCEL THE ROUTE');
   if(cityLife.mode==='interior')return leaveLifeFacility();
   if(cityLife.mode==='foot'){
     const result=cityLife.board({x:px,z:pz});if(!result.ok)return toast('선착장의 제트스키 가까이 가세요');
@@ -565,7 +565,7 @@ function toggleOnFoot(){
 function handleLifeInteraction(){
   if(lifeSequence)return;if(cityLife.mode==='water')return useItem();
   const context=cityLife.contextAt({x:px,z:pz})||(cityLife.mode==='foot'?cityPopulation.contextAt({x:px,z:pz}):null);if(!context)return toast('상호작용할 장소에 더 가까이 가세요');
-  if(cityDelivery.active&&['city-transit','enter'].includes(context.kind))return toast('COAST COURIER · DELIVERY ROUTE ACTIVE · J TO CANCEL');
+  if(cityDelivery.active&&['city-transit','enter'].includes(context.kind))return toast('COAST COURIER · DELIVERY ROUTE ACTIVE · J / Y TO CANCEL');
   if(context.kind==='npc')return performCitizenRelationship(context);if(context.kind==='plaza-kiosk')return performPlazaKioskPurchase(context);if(context.kind==='public-activity')return performPublicSpaceActivity(context);if(context.kind==='city-transit')return performCityTransitRide(context);if(context.kind==='board')return toggleOnFoot();if(context.kind==='closed')return toast(`${lifeText(context.facility.name)} · CLOSED · OPEN ${formatLifeHour(context.status.opens)}`);if(context.kind==='enter')return enterLifeFacility(context.facility);if(context.kind==='exit')return leaveLifeFacility();if(context.kind==='actions')return renderLifePanel(context.facility,{greet:true});
 }
 function formatLifeHour(hour){const value=Math.floor(hour*60),h=Math.floor(value/60)%24,m=String(value%60).padStart(2,'0');return `${String(h).padStart(2,'0')}:${m}`}
@@ -647,7 +647,7 @@ function handleCityDeliveryEvents(){
     if(event.type==='checkpoint'){audioDirector.cue('deliveryCheckpoint',.8);gamepadDirector.pulse(.46,82);toast(`${lifeText(event.checkpoint.name)} · ${event.checkpoint.kind==='pickup'?'CARGO SECURED':event.checkpoint.kind==='drop'? `${event.delivered}/3 DELIVERED`:'SAFE CROSSING'}`);saveProfile()}
     if(event.type==='completed'){cityLife.applyRoutine({hours:0,effects:{energy:-4,hunger:-3,mood:7},activityId:'job:coast-courier-run'});metrics.activitiesCompleted++;award({...event.result.reward,season:Math.round(event.result.reward.xp*.7)});recordHarborEvent('life',{facilityId:'grocery',actionId:'job:coast-courier-run',jobId:'coast-courier-run',count:1});recordStoryEvent('life',{facilityId:'grocery',actionId:'job:coast-courier-run',jobId:'coast-courier-run',count:1});recordCitizenEvent('job',{facilityId:'grocery',jobId:'coast-courier-run',count:1});onboarding.record('lifeAction');audioDirector.cue('deliveryComplete',1);gamepadDirector.pulse(.9,220);toast(`COAST EXPRESS COMPLETE · +${event.result.reward.credits.toLocaleString()} CR · TIME BONUS ${event.result.timeBonus.toLocaleString()} CR`);saveProfile()}
     if(event.type==='failed'){audioDirector.cue('deliveryFail',.9);gamepadDirector.pulse(.62,150);toast(`COAST EXPRESS FAILED · ${event.result.reason.replaceAll('-',' ').toUpperCase()}`);saveProfile()}
-    if(event.type==='cancelled'){audioDirector.cue('deliveryFail',.55);toast('COAST EXPRESS · ROUTE CANCELLED');saveProfile()}
+    if(event.type==='cancelled'){audioDirector.cue('deliveryFail',.55);gamepadDirector.pulse(.28,75);toast('COAST EXPRESS · ROUTE CANCELLED');saveProfile()}
   }
 }
 function updateCityDelivery(dt){cityDelivery.update({dt,position:{x:px,z:pz},mode:cityLife.mode});handleCityDeliveryEvents();return renderCityDelivery(cityDelivery.snapshot({x:px,z:pz}))}
@@ -959,7 +959,7 @@ function updateInput(){
     if(event.type==='disconnected'){if(STATE.started)toast('GAMEPAD DISCONNECTED');continue}
     if(event.type!=='action')continue;lastInputDevice='gamepad';document.body.dataset.lastControl=`gamepad:${event.action}`;inputEventCount++;document.body.dataset.inputEvents=String(inputEventCount);
     if(!STATE.started){if(['menuUp','menuDown','menuLeft','menuRight'].includes(event.action))navigateGamepadMenu(event.action);else if(event.action==='confirm'){const focused=document.activeElement;if(focused?.matches?.('#menu button'))focused.click();else startGame()}else if(event.action==='toggleFishing')startGame();continue}
-    if(event.action==='activity'&&STATE.mode==='RACE'&&latestCourseSnapshot.warning){recoverRaceCourse();continue}if(event.action==='item'&&!fishing.active)(cityLife.mode==='water'?useItem():handleLifeInteraction());if(event.action==='fishingAction')(cityLife.mode==='water'?fishingAction():handleLifeInteraction());if(event.action==='activity'&&fishing.active){setFishingHabitatWaypoint();continue}if(event.action==='activity'){const nearDock=Math.hypot(px-CITY_DOCK.water.x,pz-CITY_DOCK.water.z)<=CITY_DOCK.disembarkRadius;if(cityLife.mode!=='water'||nearDock)toggleOnFoot();else toggleWorldActivity()}if(event.action==='camera')(fishing.active?cycleFishingBait():STATE.camera=(STATE.camera+1)%3);if(event.action==='mode')toggleRaceMode();if(event.action==='toggleFishing')toggleFishing();if(event.action==='skill0'&&!fishing.active&&cityLife.mode==='water')activateSkill(0);if(event.action==='skill1'&&!fishing.active&&cityLife.mode==='water')activateSkill(1);
+    if(event.action==='activity'&&cityDelivery.active){cancelCityDelivery('player-cancelled');continue}if(event.action==='activity'&&STATE.mode==='RACE'&&latestCourseSnapshot.warning){recoverRaceCourse();continue}if(event.action==='item'&&!fishing.active)(cityLife.mode==='water'?useItem():handleLifeInteraction());if(event.action==='fishingAction')(cityLife.mode==='water'?fishingAction():handleLifeInteraction());if(event.action==='activity'&&fishing.active){setFishingHabitatWaypoint();continue}if(event.action==='activity'){const nearDock=Math.hypot(px-CITY_DOCK.water.x,pz-CITY_DOCK.water.z)<=CITY_DOCK.disembarkRadius;if(cityLife.mode!=='water'||nearDock)toggleOnFoot();else toggleWorldActivity()}if(event.action==='camera')(fishing.active?cycleFishingBait():STATE.camera=(STATE.camera+1)%3);if(event.action==='mode')toggleRaceMode();if(event.action==='toggleFishing')toggleFishing();if(event.action==='skill0'&&!fishing.active&&cityLife.mode==='water')activateSkill(0);if(event.action==='skill1'&&!fishing.active&&cityLife.mode==='water')activateSkill(1);
   }
   document.body.dataset.inputDevice=lastInputDevice;document.body.dataset.gamepadConnected=pad.connected?'true':'false';document.body.dataset.gamepadName=pad.id||'';document.body.dataset.gamepadIndex=pad.index==null?'':String(pad.index);
   const status=$('#gamepadSettingsStatus');if(status)status.textContent=pad.connected?pad.id:'연결된 패드 없음';

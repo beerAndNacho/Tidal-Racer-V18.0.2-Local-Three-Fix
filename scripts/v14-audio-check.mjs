@@ -1,4 +1,6 @@
 import fs from 'node:fs';
+import assert from 'node:assert/strict';
+import { courierScoreProfile } from '../v14/audio-director.js';
 const files={
   index:fs.readFileSync('index.html','utf8'),
   main:fs.readFileSync(fs.existsSync('v18/main.js')?'v18/main.js':fs.existsSync('v16/main.js')?'v16/main.js':fs.existsSync('v15/main.js')?'v15/main.js':'v14/main.js','utf8'),
@@ -21,6 +23,9 @@ const checks=[
  ['Region music',Object.keys(files.audio.match(/REGION_MOODS[\s\S]*?};/)||{}).length>=0 && files.audio.includes('BLACK REEF')],
  ['Region chord progressions',files.audio.includes('CHORD_PROGRESSIONS')&&files.audio.includes("'GOLDEN COAST'")],
  ['Layered score voices',['chord.slice','bassInterval','arpOrder','barStep===2'].every(marker=>files.audio.includes(marker))],
+ ['Courier score intensity',files.audio.includes("dataset.deliveryState==='active'")&&files.audio.includes("deliveryUrgent?118:106")],
+ ['Courier score motif',files.audio.includes('courierDegrees')&&files.audio.includes('status.dataset.scoreMode=courier.mode')],
+ ['Courier audio diagnostics',files.audio.includes('dataset.audioDeliveryMix')&&files.audio.includes('dataset.audioScoreTempo')],
  ['Music delay and filter',files.audio.includes('musicDelay')&&files.audio.includes('musicFilter')&&files.audio.includes('musicFeedback')],
  ['Event cues',files.audio.includes('EVENT_CUES')],
  ['Boost SFX',files.audio.includes('boostIgnite')],
@@ -42,4 +47,8 @@ const checks=[
  ['Toast observer',files.audio.includes("q('#toast')")],
  ['No external audio file dependency',!files.audio.match(/\.mp3|\.ogg|\.wav/)],
 ];
+assert.deepEqual(courierScoreProfile(),{active:false,urgent:false,tempo:0,intensity:null,mode:'ambient'});
+assert.deepEqual(courierScoreProfile({active:true}),{active:true,urgent:false,tempo:106,intensity:.56,mode:'courier'});
+assert.deepEqual(courierScoreProfile({active:true,urgent:true}),{active:true,urgent:true,tempo:118,intensity:.74,mode:'courier-urgent'});
+assert.deepEqual(courierScoreProfile({active:false,urgent:true}),{active:false,urgent:false,tempo:0,intensity:null,mode:'ambient'});
 let fail=0;for(const [n,ok] of checks){console.log(`${ok?'PASS':'FAIL'} ${n}`);if(!ok)fail++}console.log(`\n${checks.length-fail}/${checks.length} PASS`);process.exit(fail?1:0);

@@ -192,8 +192,9 @@ JavaScript modules and game assets.
   business drops, and use both ordered curb checkpoints at the live marina
   signal before finishing at Tidal Square. The 3:10 contract includes
   no-skip checkpoints, distance and timer HUDs, world/minimap/chart guidance,
-  a speed bonus, needs and daily gates, cancel/fail outcomes, dedicated audio,
-  rewards, telemetry, and active-route save/resume
+  a speed bonus, needs and daily gates, cancel/fail outcomes, dedicated cues,
+  a 106 BPM courier score that tightens to 118 BPM near timeout, rewards,
+  telemetry, and active-route save/resume
 - **City work economy:** six venue-specific daily shifts connect sleep, meals,
   hygiene, time of day, and reputation to performance-based wages, persistent
   job skill, promotions, and lifetime earnings
@@ -391,6 +392,7 @@ JavaScript modules and game assets.
 | World | `F` championship/free roam · `G` fishing · `H` activity · `C` camera |
 | Fishing | `Q` cast/hook · `Space` reel · `V` or gamepad View cycle bait |
 | City | `X` leave/board craft near Golden Coast dock · `WASD/arrows` move · `Shift` run · `E` interact |
+| Courier | `J` or gamepad `Y/Activity` cancel the active Coast Courier route |
 | System | `Tab` world map · `P` photo mode · `Esc` pause/save · `R` recover/restart · `M` music · `L` language |
 
 Standard Xbox/PlayStation-compatible gamepads are supported. Keyboard and

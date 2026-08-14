@@ -1,6 +1,11 @@
 const q = (s) => document.querySelector(s);
 const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
 
+export function courierScoreProfile({active=false,urgent=false}={}){
+  const delivery=Boolean(active),deliveryUrgent=delivery&&Boolean(urgent);
+  return{active:delivery,urgent:deliveryUrgent,tempo:delivery?(deliveryUrgent?118:106):0,intensity:delivery?(deliveryUrgent?.74:.56):null,mode:delivery?(deliveryUrgent?'courier-urgent':'courier'):'ambient'};
+}
+
 const REGION_MOODS = {
   'GOLDEN COAST': { root: 110.00, tempo: 116, mode: [0, 4, 7, 9], warmth: 1.0 },
   'VOLCANO BAY': { root: 82.41, tempo: 124, mode: [0, 3, 7, 10], warmth: .62 },
@@ -126,10 +131,11 @@ class AudioDirector {
     this.speed=Number(q('#speed')?.textContent||0);this.rpm=Number(q('#rpm')?.textContent||1800);
     const pos=(q('#position')?.textContent||'12').split('/')[0];const rank=Number(pos)||12;
     const speedN=clamp(this.speed/170,0,1);const chase=clamp((13-rank)/12,0,1);const boost=Boolean(window.__tidalV18?.controls?.boost||this.keyState.has('ShiftLeft')||this.keyState.has('ShiftRight'));
-    const fishing=document.body.classList.contains('fishing-active'),city=this.cityContext,cityTarget=city.mode==='interior'?(city.facilityId==='nightlife'?.52:city.facilityId==='gym'?.4:.25):city.mode==='foot'?.32+(city.plazaPerformance?city.plazaProximity*.12:0):null;
-    const target=this.paused?.1:this.scene==='menu'?.24:fishing?.22:cityTarget??clamp(.36+speedN*.38+chase*.12+(boost?.16:0)+(this.eventActive?.14:0),.3,1);
+    const fishing=document.body.classList.contains('fishing-active'),courier=courierScoreProfile({active:document.body.dataset.deliveryState==='active',urgent:q('#deliveryHud')?.dataset.urgent==='true'}),delivery=courier.active,deliveryUrgent=courier.urgent,city=this.cityContext,cityTarget=city.mode==='interior'?(city.facilityId==='nightlife'?.52:city.facilityId==='gym'?.4:.25):city.mode==='foot'?.32+(city.plazaPerformance?city.plazaProximity*.12:0):null;
+    const target=this.paused?.1:this.scene==='menu'?.24:fishing?.22:delivery?courier.intensity:cityTarget??clamp(.36+speedN*.38+chase*.12+(boost?.16:0)+(this.eventActive?.14:0),.3,1);
     this.intensity+=(target-this.intensity)*.025;
-    if(this.musicFilter){const venueCutoff=city.mode==='interior'?(city.facilityId==='nightlife'?6200:city.facilityId==='home'?2100:3400):2600+this.intensity*3900;this.musicFilter.frequency.setTargetAtTime(venueCutoff,this.ctx.currentTime,.12)}
+    if(typeof document!=='undefined'){document.body.dataset.audioDeliveryMix=delivery?(deliveryUrgent?'urgent':'active'):'off';document.body.dataset.audioScoreTempo=String(courier.tempo)}
+    if(this.musicFilter){const venueCutoff=delivery?4200+this.intensity*2100:city.mode==='interior'?(city.facilityId==='nightlife'?6200:city.facilityId==='home'?2100:3400):2600+this.intensity*3900;this.musicFilter.frequency.setTargetAtTime(venueCutoff,this.ctx.currentTime,.12)}
     this.updateEngine(speedN);this.updateAmbience(speedN);this.detectImpact();
   }
   detectImpact(){const now=performance.now();if(now-this.lastSpeedAt<120)return;const drop=this.lastSpeed-this.speed,braking=Boolean(window.__tidalV18?.controls?.brake>.1||this.keyState.has('KeyS')||this.keyState.has('ArrowDown'));if(this.lastSpeed>65&&drop>28&&!braking)this.cue('impact',clamp(drop/70,.45,1));this.lastSpeed=this.speed;this.lastSpeedAt=now}
@@ -165,7 +171,7 @@ class AudioDirector {
   startMusicClock(){if(this.musicTimer)return;this.nextBeat=this.ctx.currentTime+.05;const run=()=>{if(!this.ctx)return;while(this.nextBeat<this.ctx.currentTime+.16)this.scheduleBeat(this.nextBeat);this.musicTimer=setTimeout(run,35)};run()}
   scheduleBeat(t){
     const mood=REGION_MOODS[this.region]||REGION_MOODS['GOLDEN COAST'],progression=CHORD_PROGRESSIONS[this.region]||CHORD_PROGRESSIONS['GOLDEN COAST'];
-    const fishing=document.body.classList.contains('fishing-active'),city=this.cityContext,venueTempo=city.facilityId==='nightlife'?108:city.facilityId==='gym'?104:city.facilityId==='home'?78:88,plazaLive=city.mode==='foot'&&city.plazaPerformance&&city.plazaProximity>.04,tempo=this.scene==='menu'?94:fishing?82:city.mode==='interior'?venueTempo:plazaLive?112:mood.tempo+(this.intensity>.72?8:0),beat=60/tempo,step=this.musicStep++,barStep=step%8,chord=progression[Math.floor(step/8)%progression.length],swing=barStep%2?beat*.035:0,status=q('#audioStatus');if(status)status.dataset.musicStep=String(this.musicStep);
+    const fishing=document.body.classList.contains('fishing-active'),courier=courierScoreProfile({active:document.body.dataset.deliveryState==='active',urgent:q('#deliveryHud')?.dataset.urgent==='true'}),delivery=courier.active,deliveryUrgent=courier.urgent,city=this.cityContext,venueTempo=city.facilityId==='nightlife'?108:city.facilityId==='gym'?104:city.facilityId==='home'?78:88,plazaLive=city.mode==='foot'&&city.plazaPerformance&&city.plazaProximity>.04,tempo=this.scene==='menu'?94:fishing?82:delivery?courier.tempo:city.mode==='interior'?venueTempo:plazaLive?112:mood.tempo+(this.intensity>.72?8:0),beat=60/tempo,step=this.musicStep++,barStep=step%8,chord=progression[Math.floor(step/8)%progression.length],swing=barStep%2?beat*.035:0,status=q('#audioStatus');if(status){status.dataset.musicStep=String(this.musicStep);status.dataset.scoreMode=courier.mode}
     this.nextBeat=t+beat/2;if(city.mode==='foot'&&city.waterfront>.28&&barStep===1&&Math.floor(step/8)%6===2)this.gull(t+beat*.18,.008+.018*city.waterfront);if(!this.musicEnabled)return;
     if(barStep===0){
       for(const interval of chord.slice(0,4))this.tone(mood.root*Math.pow(2,interval/12),t,beat*3.65,'sine',.034+.012*mood.warmth,2600+1400*mood.warmth,.18,interval%2?4:-4);
@@ -175,7 +181,8 @@ class AudioDirector {
     this.tone(mood.root*2*Math.pow(2,arpInterval/12),t+swing,beat*.34,barStep%2?'triangle':'sine',this.scene==='menu'?.028:.034+.012*this.intensity,3900,.008,barStep%2?5:-5);
     if(barStep===2||barStep===6){const degree=mood.mode[(Math.floor(step/2)+Math.floor(step/8))%mood.mode.length];this.tone(mood.root*2*Math.pow(2,degree/12),t+beat*.06,beat*.82,'triangle',.04+.018*this.intensity,4600,.025)}
     if(plazaLive){const liveRoot=146.83,liveDegrees=[0,7,10,12,7,15,10,7],liveGain=.006+.03*city.plazaProximity;if(barStep%2===0)this.tone(liveRoot*2*Math.pow(2,liveDegrees[barStep]/12),t+swing,beat*.42,'triangle',liveGain,5200,.012,barStep%4?7:-7);if(barStep===2||barStep===6)this.tone(liveRoot*Math.pow(2,(barStep===2?7:10)/12),t,beat*.86,'sine',liveGain*.72,1800,.02);if(barStep===0||barStep===4)this.drum(t,'kick',.018+.026*city.plazaProximity);if(barStep===4)this.drum(t,'snare',.012+.02*city.plazaProximity);if(barStep%2===1)this.drum(t,'hat',.006+.012*city.plazaProximity)}
-    if(((this.scene==='race'&&city.mode==='water')||city.facilityId==='nightlife'||this.intensity>.62)&&!fishing){if(barStep===0||barStep===4)this.drum(t,'kick',.052+.035*this.intensity);if(barStep===4)this.drum(t,'snare',.036+.018*this.intensity);if(barStep%2===1)this.drum(t,'hat',.014+.012*this.intensity)}
+    if(delivery){const courierDegrees=[12,7,10,14,12,17,10,7],degree=courierDegrees[barStep],courierGain=.018+this.intensity*.018+(deliveryUrgent?.009:0);if([1,3,5,6].includes(barStep))this.tone(mood.root*2*Math.pow(2,degree/12),t+swing+beat*.025,beat*.27,deliveryUrgent?'sawtooth':'square',courierGain,deliveryUrgent?5200:3900,.006,barStep%2?8:-8);if(barStep===7)this.tone(mood.root*4*Math.pow(2,7/12),t+beat*.06,beat*.18,'triangle',courierGain*.72,5600,.004)}
+    if(((this.scene==='race'&&city.mode==='water')||city.facilityId==='nightlife'||delivery||this.intensity>.62)&&!fishing){if(barStep===0||barStep===4)this.drum(t,'kick',.052+.035*this.intensity);if(barStep===4)this.drum(t,'snare',.036+.018*this.intensity);if(barStep%2===1)this.drum(t,'hat',.014+.012*this.intensity+(deliveryUrgent?.008:0))}
     else if(barStep===0)this.drum(t,'kick',.022);
   }
   tone(freq,t,dur,type='sine',gain=.03,cutoff=2200,attack=.018,detune=0){const o=this.ctx.createOscillator(),g=this.ctx.createGain(),f=this.ctx.createBiquadFilter();o.type=type;o.frequency.setValueAtTime(freq,t);o.detune.value=detune;f.type='lowpass';f.frequency.value=cutoff;g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(Math.max(.0002,gain),t+attack);g.gain.setValueAtTime(Math.max(.0002,gain*.78),t+Math.max(attack+.02,dur*.68));g.gain.exponentialRampToValueAtTime(.0001,t+dur);o.connect(f).connect(g).connect(this.musicInput||this.musicBus);o.start(t);o.stop(t+dur+.04)}
