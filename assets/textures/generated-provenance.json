@@ -1,6 +1,6 @@
 {
-  "version": 2,
-  "generatedAt": "2026-08-12",
+  "version": 3,
+  "generatedAt": "2026-08-14",
   "tool": "OpenAI built-in image generation",
   "policy": "Project-exclusive generated environment textures. Prompts prohibited readable text, brands, trademarks, people, vehicles, copied locations and watermarks.",
   "files": [
@@ -31,6 +31,13 @@
       "source": "exec-b58698c7-f829-444e-aac2-36e7cab0ab55.png",
       "output": "1254x1254 PNG",
       "promptSummary": "Original fictional front-facing contemporary harbor office and apartment facade atlas with precast concrete, deep aluminum-framed glazing, vertical louvers, glass balcony bays and blank retail fronts under neutral cloudy light."
+    },
+    {
+      "file": "coastal-paving-photoreal-v1.webp",
+      "sha256": "3ba779303ba2f84b399e0bc2eaf77272d26f154ec46d02b6683558d970167281",
+      "source": "exec-15d94fc5-43ac-4648-90b5-01cb9f57168f.png",
+      "output": "1024x1024 WebP quality 82",
+      "promptSummary": "Original orthographic coastal-city concrete paving albedo with fine aggregate, salt wear, restrained joints and irregular repairs under flat neutral material-capture lighting."
     }
   ]
 }

@@ -12,7 +12,7 @@ add('sustained headroom restores resolution',governor.scale>lowScale);
 add('balanced floor protects legibility',governor.minScale===.66);
 governor.setQuality('ultra');add('ultra floor remains higher',governor.minScale===.78);
 renderer.info.render.calls=6200;for(let i=0;i<260;i++)governor.sample(1/60,true);add('geometry budget triggers downshift',governor.snapshot().reason==='geometry-budget'||governor.scale<1);
-add('whole-frame renderer statistics enabled',renderer.info.autoReset===false&&main.includes('renderer.info.reset();composer.render();performanceGovernor.sample(dt,STATE.started)'));
+add('whole-frame renderer statistics enabled',renderer.info.autoReset===false&&main.includes('renderer.info.reset();composer.render();capturePhotoFrame();performanceGovernor.sample(rawDt,STATE.started&&!STATE.paused)'));
 add('quality and resize integration',main.includes('performanceGovernor.setQuality(STATE.quality)')&&main.includes('performanceGovernor.resize()'));
 add('runtime diagnostics exposed',main.includes('get performance(){return performanceGovernor.snapshot()}'));
 add('scene complexity diagnostics exposed',main.includes('get scene(){return sceneDiagnostics()}')&&engine.includes('export function sceneDiagnostics()'));

@@ -36,7 +36,7 @@ hapticDirector.updateSettings({vibration:false});add('vibration setting disables
 state=director.poll([]);events=director.drainEvents();add('disconnect clears all live controls',!state.connected&&!state.drift&&!state.boost&&state.steer===0&&events.some(event=>event.type==='disconnected'));
 
 const main=fs.readFileSync('v18/main.js','utf8'),html=fs.readFileSync('index.html','utf8'),audio=fs.readFileSync('v14/audio-director.js','utf8'),policy=JSON.parse(fs.readFileSync('release/release-policy.json','utf8'));
-add('main loop merges gamepad before physics',main.includes('STATE.time+=dt;updateInput()')&&main.includes('liveControls.throttle-liveControls.brake'));
+add('main loop merges gamepad before physics',main.includes('updateInput();const dt=STATE.paused?0:rawDt')&&main.indexOf('updateInput();const dt=STATE.paused?0:rawDt')<main.lastIndexOf('updatePhysics(dt)')&&main.includes('liveControls.throttle-liveControls.brake'));
 add('gamepad actions cover menu, racing, fishing and activities',['confirm','menuUp','menuDown','menuLeft','menuRight','item','fishingAction','activity','camera','mode','toggleFishing','skill0','skill1'].every(action=>main.includes(`event.action==='${action}'`)||main.includes(`'${action}'`))&&main.includes('navigateGamepadMenu'));
 add('controller can start the game without a keyboard',main.includes("event.action==='confirm'")&&main.includes("event.action==='toggleFishing')startGame()")&&main.includes("$('#startBtn').onclick=startGame"));
 add('gamepad settings and visible status UI exist',html.includes('id="gamepadStatus"')&&main.includes('data-gamepad="deadzone"')&&main.includes('data-gamepad="sensitivity"')&&main.includes('data-gamepad="vibration"'));

@@ -3,7 +3,7 @@ import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 
 const root = process.cwd();
-const git = spawnSync('git', ['ls-files', '-z'], { cwd: root, encoding: 'utf8' });
+const git = spawnSync('git', ['ls-files', '-z', '--cached', '--others', '--exclude-standard'], { cwd: root, encoding: 'utf8' });
 
 const walk = (directory, output = []) => {
   for (const entry of fs.readdirSync(directory, { withFileTypes: true })) {
@@ -25,7 +25,7 @@ const check = (name, ok, evidence) => checks.push({ name, ok: Boolean(ok), evide
 const required = [
   'README.md', 'README_LOCAL.txt', 'LICENSE', 'SECURITY.md', 'run_local.bat',
   'run_local.sh', 'serve_local.ps1', 'index.html', 'docs/PRESS_KIT.md',
-  'docs/promo/THREADS_KO.md', 'docs/promo/PROVENANCE.md',
+  'docs/promo/THREADS_KO.md', 'docs/promo/THREADS_CAMPAIGN_KO.md', 'docs/promo/PROVENANCE.md',
   'docs/promo/tidal-racer-launch-key-art.png', 'assets/THIRD_PARTY_NOTICES.md',
   'vendor/three/LICENSE',
 ];
@@ -43,8 +43,8 @@ check('no generated or authoring files', forbidden.length === 0, forbidden.lengt
 const fileStats = files.filter(file => fs.existsSync(path.join(root, file))).map(file => ({ file, bytes: fs.statSync(path.join(root, file)).size }));
 const oversized = fileStats.filter(item => item.bytes >= 95 * 1024 * 1024);
 const totalBytes = fileStats.reduce((sum, item) => sum + item.bytes, 0);
-check('GitHub file size', oversized.length === 0, oversized.length ? oversized.map(item => item.file).join(', ') : 'all tracked files < 95 MiB');
-check('lean clone', totalBytes < 140 * 1024 * 1024, `${(totalBytes / 1048576).toFixed(2)} MiB tracked`);
+check('GitHub file size', oversized.length === 0, oversized.length ? oversized.map(item => item.file).join(', ') : 'all publishable files < 95 MiB');
+check('lean clone', totalBytes < 140 * 1024 * 1024, `${(totalBytes / 1048576).toFixed(2)} MiB publishable`);
 
 const textExtensions = new Set(['', '.bat', '.css', '.html', '.js', '.json', '.md', '.mjs', '.ps1', '.py', '.sh', '.txt', '.yml', '.yaml']);
 const candidates = fileStats.filter(item => item.bytes < 5 * 1024 * 1024 && textExtensions.has(path.extname(item.file).toLowerCase()));
@@ -66,6 +66,10 @@ check('credential and personal-path scan', findings.length === 0, findings.lengt
 const readme = fs.readFileSync(path.join(root, 'README.md'), 'utf8');
 check('clone instructions', readme.includes('git clone https://github.com/beerAndNacho/') && readme.includes('.\\run_local.bat'), 'Windows clone and launch path');
 check('honest release wording', readme.includes('free public preview') && readme.includes('not a claimed AAA'), 'preview limitations disclosed');
+const press = fs.readFileSync(path.join(root, 'docs/PRESS_KIT.md'), 'utf8');
+const campaign = fs.readFileSync(path.join(root, 'docs/promo/THREADS_CAMPAIGN_KO.md'), 'utf8');
+check('current press facts', press.includes('9 enterable city facilities') && press.includes('3-stop Coast Shuttle') && press.includes('10 parked curbside vehicles'), 'current verifiable city and traffic facts');
+check('honest Threads campaign', campaign.includes('홍보용 일러스트') && campaign.includes('실제 화면 녹화') && campaign.includes('성공을 보장하지 않는다'), 'seven-day campaign separates illustration, footage, and measurable outcomes');
 
 const index = fs.readFileSync(path.join(root, 'index.html'), 'utf8');
 check('share metadata', index.includes('og:title') && index.includes('og:image') && index.includes('Race, Fish, Explore'), 'Open Graph title/image/description');
@@ -77,4 +81,3 @@ for (const result of checks) {
 }
 console.log(`\n${checks.length - failures}/${checks.length} public release checks PASS`);
 process.exit(failures ? 1 : 0);
-

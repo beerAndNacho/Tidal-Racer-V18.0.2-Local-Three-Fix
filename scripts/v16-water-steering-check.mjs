@@ -37,7 +37,7 @@ add('reduced bloom washout',bloomUltra<=.22&&bloomBalanced<=.14&&bloomRadius<=.3
 add('top-screen glare shade',files.index.includes('linear-gradient(180deg,rgba(6,14,20,.24)'));
 add('left key mapping',files.main.includes("KeyA:'left'")&&files.main.includes("ArrowLeft:'left'"));
 add('right key mapping',files.main.includes("KeyD:'right'")&&files.main.includes("ArrowRight:'right'"));
-add('positive left yaw sign',files.main.includes('const targetYaw=steer*steerAuthority*reverseSign')&&!files.main.includes('const targetYaw=-steer'));
+add('positive left yaw sign',(files.main.includes('targetYaw=steer*steerAuthority')||files.main.includes('const targetYaw=steer*steerAuthority*reverseSign'))&&!files.main.includes('const targetYaw=-steer'));
 function simulate(steer){let x=0,z=0,heading=Math.PI,yawRate=0,speed=22;const dt=1/120,craftTurn=1,craftMax=44;for(let i=0;i<240;i++){const speedRatio=Math.min(1,Math.abs(speed)/craftMax),reverseSign=speed<-.5?-.68:1,steerAuthority=(.42+speedRatio*.66)*.82*craftTurn,targetYaw=steer*steerAuthority*reverseSign;yawRate+=(targetYaw-yawRate)*(1-Math.exp(-(3.3+speedRatio)*dt));heading+=yawRate*dt;x+=Math.sin(heading)*speed*dt;z+=Math.cos(heading)*speed*dt}return{x,z}}
 const left=simulate(1),right=simulate(-1);
 add('forward A/left moves screen-left',left.x<0,`x ${left.x.toFixed(2)}`);

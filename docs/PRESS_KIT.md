@@ -26,8 +26,8 @@
 Tidal Racer drops players into a nine-region archipelago where an 11-rider
 race can turn into free exploration, fishing, regional activities, or a trip
 ashore. The V18.0.2 public preview includes persistent progression, 27 fish
-species, authored riders and coastal facades, adaptive music, and a small
-Golden Coast city-life loop.
+species, authored riders and coastal facades, adaptive music, and an enterable
+Golden Coast city-life loop with homes, services, work, leisure, and transit.
 
 ## Verifiable feature facts
 
@@ -35,7 +35,12 @@ Golden Coast city-life loop.
 - 9 streamed regions and 9 regional activities
 - 27 fish species across 5 rarities
 - 8 career chapters
-- 6 enterable city facilities
+- 9 enterable city facilities
+- 18 scheduled citizens
+- 3-stop Coast Shuttle
+- 1 daily playable Coast Courier route with 6 ordered checkpoints, a carried
+  parcel, live traffic crossing, timer, and fast-delivery bonus
+- 16 moving road vehicles and 10 parked curbside vehicles
 - Korean and English UI
 - Keyboard and gamepad support
 - Local runtime with no account or telemetry
@@ -60,4 +65,3 @@ verification remains ongoing.
 
 Use [GitHub Issues](https://github.com/beerAndNacho/Tidal-Racer-V18.0.2-Local-Three-Fix/issues)
 for press questions, feedback, and bug reports.
-

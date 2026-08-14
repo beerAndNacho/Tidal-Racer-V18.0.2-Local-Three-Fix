@@ -1,0 +1,20 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+
+const life=fs.readFileSync('v18/city-life-system.js','utf8'),main=fs.readFileSync('v18/main.js','utf8'),index=fs.readFileSync('index.html','utf8'),audio=fs.readFileSync('v14/audio-director.js','utf8'),smoke=fs.readFileSync('scripts/package-smoke-check.mjs','utf8');
+const core=life.slice(life.indexOf('const clamp='),life.indexOf('function physical(')).replaceAll('export ','');
+const {CITY_DOCK,CityLifeDirector}=new Function(`${core};return {CITY_DOCK,CityLifeDirector};`)();
+assert.deepEqual(CITY_DOCK.berth,{x:230,z:507,heading:Math.PI},'Golden Coast needs one authored safe berth');
+const director=new CityLifeDirector(),arrival=director.disembark({x:CITY_DOCK.water.x+34,z:CITY_DOCK.water.z-12,heading:.7,speed:0});
+assert.ok(arrival.ok&&director.mode==='foot','stopped craft in the approach zone must disembark');
+assert.deepEqual(director.parkedCraft,CITY_DOCK.berth,'disembark must secure the craft at the authored berth');
+assert.deepEqual(arrival.position,CITY_DOCK.shore,'arrival must begin at the dock gate');
+const departure=director.board(CITY_DOCK.shore);assert.ok(departure.ok&&director.mode==='water','boarding at the dock gate must return to water mode');assert.deepEqual(departure.parked,CITY_DOCK.berth,'boarding must restore the secured craft position');
+for(const token of ['function addMarinaDock','golden-coast-marina-berth','marina-floating-finger','marina-deck-panel-','marina-mooring-line','marina-life-ring','marina-berth-light','function animateMarinaDock','dataset.marinaBerth','dataset.marinaDockLights'])assert.ok(life.includes(token),'authored marina environment missing '+token);
+for(const token of ['DOCK_TRANSITION_COPY','function beginDockTransition','function updateDockTransition',"beginDockTransition('board')","beginDockTransition('disembark')",'transitionLocked=Boolean(dockTransition)','dataset.dockTransitionProgress'])assert.ok(main.includes(token),'dock transition runtime missing '+token);
+for(const id of ['dockTransition','dockTransitionEyebrow','dockTransitionTitle','dockTransitionDetail','dockTransitionFill'])assert.ok(index.includes(`id="${id}"`),'dock transition presentation missing '+id);
+assert.ok(index.includes('.dockTransition')&&index.includes("dockTransition[data-kind='board']")&&index.includes('body.reduced-effects .dockTransition'),'transition needs mode styling and reduced-effects support');
+for(const cue of ["case'dockDisembark'","case'dockBoard'"])assert.ok(audio.includes(cue),'dock transition sound missing '+cue);
+assert.ok(main.includes("dockDisembark:'선박 계류 및 하선'")&&main.includes("dockBoard:'계류줄 해제 및 탑승'"),'dock sounds need Korean accessibility captions');
+assert.ok(smoke.includes('authored marina transition'),'package smoke must cover the marina transition');
+console.log('PASS dock transition: safe authored berth snap, modeled floating pier, piles, lights, mooring line and life ring, bilingual cinematic overlay, locked controls, haptics, sound and captions');

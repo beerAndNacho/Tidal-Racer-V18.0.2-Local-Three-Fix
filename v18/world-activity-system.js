@@ -34,7 +34,7 @@ export const WORLD_ACTIVITIES=[
 ];
 
 export class WorldActivityDirector{
-  constructor(catalog=WORLD_ACTIVITIES){this.catalog=catalog;this.active=null;this.profile={completed:{},best:{}};try{if(typeof localStorage!=='undefined')Object.assign(this.profile,JSON.parse(localStorage.getItem(STORE_KEY)||'null')||{})}catch{}}
+  constructor(catalog=WORLD_ACTIVITIES,{storageKey=STORE_KEY}={}){this.catalog=Array.isArray(catalog)?catalog:WORLD_ACTIVITIES;this.storageKey=storageKey;this.active=null;this.profile={completed:{},best:{}};try{if(this.storageKey&&typeof localStorage!=='undefined')this.restore(JSON.parse(localStorage.getItem(this.storageKey)||'null'))}catch{}}
   forRegion(region){return this.catalog.find(item=>item.region===region)||this.catalog[0]}
   start(id,time=0){const definition=this.catalog.find(item=>item.id===id);if(!definition)return null;this.active={definition,step:0,startedAt:time,deadline:time+definition.timeLimit,holdProgress:0};return{type:'started',activity:definition}}
   cancel(){if(!this.active)return null;const definition=this.active.definition;this.active=null;return{type:'cancelled',activity:definition}}
@@ -52,5 +52,7 @@ export class WorldActivityDirector{
     return null;
   }
   snapshot({x=0,z=0,time=0}={}){if(!this.active)return{active:false,completed:this.profile.completed,best:this.profile.best};const state=this.active,target=state.definition.steps[state.step];return{active:true,id:state.definition.id,type:state.definition.type,title:state.definition.title,description:state.definition.description,step:state.step,total:state.definition.steps.length,target,label:target.label,distance:Math.hypot(x-target.x,z-target.z),timeRemaining:Math.max(0,state.deadline-time),holdProgress:state.holdProgress,progress:(state.step+(target.hold?state.holdProgress/target.hold:0))/state.definition.steps.length,reward:state.definition.reward}}
-  save(){try{if(typeof localStorage!=='undefined')localStorage.setItem(STORE_KEY,JSON.stringify(this.profile))}catch{}}
+  serialize(){return JSON.parse(JSON.stringify(this.profile))}
+  restore(saved){if(!saved||typeof saved!=='object')return this.profile;this.profile={completed:{...(saved.completed||{})},best:{...(saved.best||{})}};return this.profile}
+  save(){try{if(this.storageKey&&typeof localStorage!=='undefined')localStorage.setItem(this.storageKey,JSON.stringify(this.serialize()))}catch{}}
 }

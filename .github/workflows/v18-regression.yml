@@ -17,12 +17,64 @@ jobs:
         run: node scripts/v18-loading-check.mjs
       - name: Local launcher and runtime
         run: node scripts/v18-local-runtime-check.mjs
+      - name: Dependency-closed Three.js package
+        run: node scripts/v18-three-runtime-slim-check.mjs
       - name: Rival grid race
         run: node scripts/v18-rival-race-check.mjs
       - name: Fishing
         run: node scripts/v18-fishing-check.mjs
+      - name: Fishing strategy
+        run: node scripts/v18-fishing-strategy-check.mjs
+      - name: Fishing lure presentation
+        run: node scripts/v18-fishing-lure-visual-check.mjs
+      - name: Fishing habitat sonar
+        run: node scripts/v18-fishing-sonar-check.mjs
       - name: City life
         run: node scripts/v18-city-life-check.mjs
+      - name: East waterfront plaza
+        run: node scripts/v18-east-waterfront-plaza-check.mjs
+      - name: Interactive public-space routines
+        run: node scripts/v18-public-space-activity-check.mjs
+      - name: Persistent daily plaza kiosks
+        run: node scripts/v18-plaza-kiosk-check.mjs
+      - name: Staffed reactive plaza kiosks
+        run: node scripts/v18-plaza-kiosk-service-check.mjs
+      - name: Playable scheduled Coast Shuttle
+        run: node scripts/v18-city-transit-check.mjs
+      - name: Transit-aware navigation chart
+        run: node scripts/v18-transit-navigation-check.mjs
+      - name: Spatial waterfront performance audio
+        run: node scripts/v18-plaza-audio-check.mjs
+      - name: Interior camera occlusion
+        run: node scripts/v18-interior-camera-check.mjs
+      - name: Playable harbor arcade
+        run: node scripts/v18-harbor-arcade-check.mjs
+      - name: Playable nightlife rhythm
+        run: node scripts/v18-nightlife-rhythm-check.mjs
+      - name: Contextual lifestyle props
+        run: node scripts/v18-lifestyle-prop-check.mjs
+      - name: Persistent lifestyle effects
+        run: node scripts/v18-lifestyle-effects-check.mjs
+      - name: Persistent home pantry economy
+        run: node scripts/v18-pantry-economy-check.mjs
+      - name: Bank payments and saved statement
+        run: node scripts/v18-bank-ledger-check.mjs
+      - name: Rotating daily venue programs
+        run: node scripts/v18-venue-program-check.mjs
+      - name: Physical daily storefront marquees
+        run: node scripts/v18-storefront-program-sign-check.mjs
+      - name: Layered coastal storefront architecture
+        run: node scripts/v18-storefront-architecture-check.mjs
+      - name: Mixed-use city infill and service alleys
+        run: node scripts/v18-city-infill-check.mjs
+      - name: Detailed parked streetscape
+        run: node scripts/v18-parked-vehicle-check.mjs
+      - name: Reactive courier delivery routine
+        run: node scripts/v18-delivery-routine-check.mjs
+      - name: Playable player courier contract
+        run: node scripts/v18-player-delivery-check.mjs
+      - name: Coastal paving presentation
+        run: node scripts/v18-coastal-paving-check.mjs
       - name: Gamepad and remapping
         run: node scripts/v18-gamepad-check.mjs
       - name: Korean and English localization
@@ -33,6 +85,8 @@ jobs:
         run: node scripts/v17-module-check.mjs ko
       - name: Water, visibility and steering
         run: node scripts/v16-water-steering-check.mjs
+      - name: Layered craft dynamics
+        run: node scripts/v18-craft-dynamics-check.mjs
       - name: Character system
         run: node scripts/v15-character-check.mjs
       - name: Adaptive audio

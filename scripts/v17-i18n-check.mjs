@@ -45,7 +45,7 @@ const checks = [
   ['Region bilingual label', files.index.includes('data-local-name') && files.i18n.includes('applyRegion()')],
   ['Language controls documented', files.readme.includes('?lang=ko') && files.readme.includes('?lang=en')],
   ['Localization guide', files.docs.includes('Canonical gameplay identifiers')],
-  ['True left steering retained', files.v16.includes("targetYaw=steer*steerAuthority*reverseSign")],
+  ['True left steering retained', files.v16.includes("targetYaw=steer*steerAuthority")],
   ['Rough-water model retained', files.v16.includes('waveHeight(px,pz,STATE.time,sea)')],
   ['Visibility tuning retained', files.engine.includes('toneMappingExposure=0.86') || files.engine.includes('toneMappingExposure=.86')],
   ['Adaptive audio retained', files.audio.includes('REGION_MOODS') && files.audio.includes('updateEngine')],

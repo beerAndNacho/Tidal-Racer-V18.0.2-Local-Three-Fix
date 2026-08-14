@@ -14,7 +14,7 @@ add('game canvas is keyboard focusable',main.includes('renderer.domElement.tabIn
 add('start transfers focus to game canvas',main.includes("requestAnimationFrame(()=>renderer.domElement.focus({preventScroll:true}))"));
 add('input diagnostics exposed',main.includes('dataset.lastControl')&&main.includes('dataset.inputEvents'));
 add('camera has no out-of-scope sea reference',!cameraBlock.includes('updateMarineLife')&&!cameraBlock.includes(',sea,'));
-add('marine update uses scoped sea value',worldBlock.includes("const storm=STATE.event?.name==='STORM CELL',sea=currentSeaState()")&&worldBlock.includes('updateMarineLife(STATE.time,px,pz,sea,speedN)'));
+add('marine update uses weather-scoped sea and region',worldBlock.includes('const storm=latestWeather.storm>.48,sea=currentSeaState()')&&worldBlock.includes('updateMarineLife(STATE.time,px,pz,sea,speedN,weatherRegion)')&&main.includes('latestWeather.seaBonus'));
 add('runtime exposes merged keyboard and gamepad state',main.includes('get controls(){return {...liveControls')&&main.includes('keyboard:{...keys}'));
 
 let failed=0;for(const test of tests){console.log(`${test.ok?'PASS':'FAIL'} ${test.name}`);if(!test.ok)failed++}

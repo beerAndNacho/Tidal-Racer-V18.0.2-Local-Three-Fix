@@ -27,7 +27,7 @@ add('Streaming badge',files.index.includes('streamStatus')&&files.bootstrap.incl
 add('Bilingual system retained',files.main.includes("from '../v17/i18n.js'")&&files.i18n.includes("event.code==='KeyL'"));
 add('Idempotent store translation',files.i18n.includes('if(node.nodeValue!==text)node.nodeValue=text'));
 add('Rough water retained',files.main.includes('updateWaterSurface')&&files.main.includes('waveHeight'));
-add('True steering retained',files.main.includes('const targetYaw=steer*steerAuthority*reverseSign'));
+add('True steering retained',files.main.includes('targetYaw=steer*steerAuthority'));
 add('Cinematic color grade',files.engine.includes('CinematicGradeShader')&&files.engine.includes('new ShaderPass'));
 add('Lit resort promenade',files.engine.includes('addResortPromenade')&&files.engine.includes('PointLight'));
 add('Instanced race guide buoys',files.engine.includes('new THREE.InstancedMesh')&&files.engine.includes('raceGuideMaterial'));

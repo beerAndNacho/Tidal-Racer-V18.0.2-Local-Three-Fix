@@ -3,6 +3,7 @@ import path from 'node:path';
 import crypto from 'node:crypto';
 import { spawnSync } from 'node:child_process';
 import { runReleaseAudit } from './release-audit.mjs';
+import { collectThreeRuntimeFiles } from './three-runtime-files.mjs';
 
 const root=process.cwd(),preview=process.argv.includes('--preview'),policy=JSON.parse(fs.readFileSync(path.join(root,'release/release-policy.json'),'utf8'));
 const audit=runReleaseAudit({runTests:true,write:true});
@@ -17,20 +18,18 @@ const output=path.join(root,'release','builds',`tidal-racer-${safeVersion}-${cha
 if(fs.existsSync(output))throw new Error(`Refusing to overwrite existing build: ${output}`);
 fs.mkdirSync(output,{recursive:true});
 
-const files=['index.html','data-v12.js','systems-v13.js','README.md','README_LOCAL.txt','LICENSE','SECURITY.md','run_local.bat','run_local.sh','serve_local.ps1','prepare_vendor.py','serve_local.py'];
+const files=['index.html','data-v12.js','systems-v13.js','README.md','README_LOCAL.txt','LICENSE','SECURITY.md','run_local.bat','run_local.sh','serve_local.ps1','prepare_vendor.py','serve_local.py','docs/PRESS_KIT.md','docs/promo/THREADS_KO.md','docs/promo/THREADS_CAMPAIGN_KO.md','docs/promo/PROVENANCE.md','docs/promo/tidal-racer-launch-key-art.png'];
 const folders=['assets','v18','v16','v17'];
-const extraFiles=['v14/audio-director.js','vendor/three/LICENSE','vendor/three/package.json','vendor/three/build/three.module.js','vendor/three/build/three.core.js'];
-const extraFolders=['vendor/three/examples/jsm'];
+const threeRuntimeFiles=collectThreeRuntimeFiles(root),extraFiles=['v14/audio-director.js',...threeRuntimeFiles];
 const copyFile=relative=>{const source=path.join(root,relative),target=path.join(output,relative);if(!fs.existsSync(source))throw new Error(`Missing package input: ${relative}`);fs.mkdirSync(path.dirname(target),{recursive:true});fs.copyFileSync(source,target)};
 for(const file of files)copyFile(file);
 for(const folder of folders)fs.cpSync(path.join(root,folder),path.join(output,folder),{recursive:true});
-for(const file of extraFiles)copyFile(file);
-for(const folder of extraFolders)fs.cpSync(path.join(root,folder),path.join(output,folder),{recursive:true});
+for(const file of [...new Set(extraFiles)])copyFile(file);
 copyFile('release/release-policy.json');copyFile('release/RELEASE_AUDIT.json');
 if(!preview)for(const legalFile of['release/EULA.md','release/PRIVACY.md','release/SUPPORT_POLICY.md'])copyFile(legalFile);
 
 const localModuleRefs=[];
-for(const relative of extraFiles.filter(file=>file.endsWith('.js'))){const source=fs.readFileSync(path.join(output,relative),'utf8');for(const match of source.matchAll(/from\s+["'](\.\/[^"']+)["']/g))localModuleRefs.push(path.normalize(path.join(path.dirname(relative),match[1])))}
+for(const relative of threeRuntimeFiles.filter(file=>file.endsWith('.js'))){const source=fs.readFileSync(path.join(output,relative),'utf8');for(const match of source.matchAll(/(?:from\s*|import\s*\()\s*["'](\.[^"']+)["']/g))localModuleRefs.push(path.normalize(path.join(path.dirname(relative),match[1])))}
 const missingLocalModules=[...new Set(localModuleRefs)].filter(relative=>!fs.existsSync(path.join(output,relative)));
 if(missingLocalModules.length){console.error(`PACKAGE MODULE PREFLIGHT FAILED: ${missingLocalModules.join(', ')}`);process.exit(4)}
 

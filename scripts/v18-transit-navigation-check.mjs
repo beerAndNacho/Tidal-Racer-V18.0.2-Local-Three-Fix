@@ -1,0 +1,12 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+
+const main=fs.readFileSync('v18/main.js','utf8'),life=fs.readFileSync('v18/city-life-system.js','utf8'),index=fs.readFileSync('index.html','utf8'),smoke=fs.readFileSync('scripts/package-smoke-check.mjs','utf8'),readme=fs.readFileSync('README.md','utf8'),contributing=fs.readFileSync('CONTRIBUTING.md','utf8'),workflow=fs.readFileSync('.github/workflows/v18-regression.yml','utf8');
+const core=life.slice(life.indexOf('const clamp='),life.indexOf('export class CityLifeDirector')).replaceAll('export ','');
+const {CITY_TRANSIT_STOPS,cityTransitVehiclePosition}=new Function(`${core};return {CITY_TRANSIT_STOPS,cityTransitVehiclePosition};`)();
+assert.equal(CITY_TRANSIT_STOPS.length,3);const east=cityTransitVehiclePosition(6.2),west=cityTransitVehiclePosition(6.7),off=cityTransitVehiclePosition(23.5);assert.ok(east.operating&&east.eastbound&&east.x>72&&east.x<510);assert.ok(west.operating&&!west.eastbound&&west.x>72&&west.x<510);assert.equal(off.operating,false);
+for(const token of ['cityTransitVehiclePosition','function drawTransitMapLayer','CITY_TRANSIT_STOPS','cityTransitStatus(stop.id,cityLife.profile.worldHour)','ctx.setLineDash([9,6])',"mapPin(ctx,stop.spot,status.available?'#5fd9ff':'#48616b'",'vehicle.eastbound?Math.PI/2:-Math.PI/2','dataset.mapTransitLayer','dataset.mapTransitStops',"tone:'transit'",'transitStop?.distance<65','dataset.mapWaypointType',"waypoint.label.startsWith('COAST SHUTTLE')",'COAST SHUTTLE STOP REACHED · PRESS E TO RIDE','dataset.navigationArrival'])assert.ok(main.includes(token),`transit map integration missing ${token}`);
+assert.ok(life.includes('export function cityTransitVehiclePosition')&&life.includes('vehicle=cityTransitVehiclePosition(hour)'),'world and chart must share the exact shuttle position model');
+assert.ok(index.includes('.mapJournalCard.transit{'),'transit journal needs a dedicated visual treatment');
+for(const [source,token] of [[smoke,'transit-aware navigation chart'],[readme,'Transit-aware navigation chart'],[contributing,'v18-transit-navigation-check.mjs'],[workflow,'v18-transit-navigation-check.mjs']])assert.ok(source.includes(token),`release verification wiring missing ${token}`);
+console.log('PASS transit navigation: shared vehicle model, three schedule-aware stop pins, closed route, live directional vehicle, on/off-service state, nearest-stop journal, click snap, saved walking waypoint, transit HUD, arrival prompt, telemetry, docs, smoke, and CI');

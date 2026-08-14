@@ -10,7 +10,7 @@ add('wave-following boats',engine.includes('surface=waveHeight(x,z,time,seaState
 add('traffic world diagnostic',engine.includes('document.body.dataset.ambientTraffic'));
 add('eighteen animated promenade pedestrians',engine.includes('for(let i=0;i<18;i++)')&&engine.includes('ambientPedestrians.push(person)')&&engine.includes('d.limbs.legs[0].rotation.x=stride'));
 add('pedestrian world diagnostic',engine.includes('document.body.dataset.ambientPedestrians'));
-add('live traffic update export',engine.includes('export function updateAmbientTraffic')&&main.includes('updateAmbientTraffic(STATE.time,dt,sea)'));
+add('live traffic update export',engine.includes('export function updateAmbientTraffic')&&main.includes("updateAmbientTraffic(STATE.time,dt,sea,{id:'player',x:px,z:pz,mode:cityLife.mode,actors:trafficActors})"));
 add('cleaner race guide proportions',engine.includes('CylinderGeometry(.28,.46,2.5,14)')&&engine.includes('guideDummy.position.y=.82'));
 add('reduced reflection distortion',engine.includes('distortionScale:1.05')&&engine.includes('.96+speedN*.45'));
 

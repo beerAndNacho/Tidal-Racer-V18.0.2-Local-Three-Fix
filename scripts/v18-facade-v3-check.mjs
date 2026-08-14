@@ -3,7 +3,7 @@ import crypto from 'node:crypto';
 
 const engine=fs.readFileSync('v18/engine.js','utf8'),provenance=JSON.parse(fs.readFileSync('assets/textures/generated-provenance.json','utf8')),tests=[],add=(name,ok)=>tests.push({name,ok:Boolean(ok)}),sha=file=>crypto.createHash('sha256').update(fs.readFileSync(file)).digest('hex');
 add('two V3 facade modules are registered',['facade-marina-mixed-use-v3.webp','facade-marina-service-v3.webp'].every(file=>engine.includes(file)));
-add('generated texture provenance is project local',provenance.tool==='OpenAI built-in image generation'&&provenance.files.length===4);
+add('generated texture provenance is project local',provenance.tool==='OpenAI built-in image generation'&&provenance.files.length>=4&&provenance.files.every(asset=>/^exec-[a-f0-9-]+\.png$/.test(asset.source)));
 for(const asset of provenance.files){const file=`assets/textures/${asset.file}`;add(`${asset.file} exists`,fs.existsSync(file));add(`${asset.file} hash matches`,fs.existsSync(file)&&sha(file)===asset.sha256);add(`${asset.file} records generation source`,/^exec-[a-f0-9-]+\.png$/.test(asset.source)&&asset.promptSummary.length>30)}
 add('facade selection includes six authored variants',(engine.match(/facade-[a-z0-9-]+\.webp/g)||[]).length>=6);
 add('photoreal V4 facade is loaded locally',engine.includes("facade-coastal-photoreal-v4.png")&&engine.includes('facadePhotoreal:localTexture'));

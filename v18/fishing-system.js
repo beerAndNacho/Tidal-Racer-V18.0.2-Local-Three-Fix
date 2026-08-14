@@ -1,3 +1,5 @@
+import { REGIONS } from '../data-v12.js';
+
 const clamp=(v,min,max)=>Math.max(min,Math.min(max,v));
 
 export const FISH_RARITIES={
@@ -46,31 +48,88 @@ export const FISHING_TACKLE=[
   {level:4,name:'ABYSS MASTER',line:150,reel:1.62,control:1.4,unlock:70},
 ];
 
-function weightedSpecies(region,random,seaState=1){
+export const FISHING_BAITS=[
+  {id:'shore-worm',name:'SHORE WORM',koName:'갯지렁이',unlock:0,zone:'shallow',depth:'2–8 M',time:'any',behaviors:['school','dash','bottom']},
+  {id:'flash-minnow',name:'FLASH MINNOW',koName:'플래시 미노우',unlock:8,zone:'mid',depth:'8–22 M',time:'day',behaviors:['runner','dash','zigzag']},
+  {id:'surface-popper',name:'SURFACE POPPER',koName:'서피스 포퍼',unlock:22,zone:'surface',depth:'0–3 M',time:'dawn',behaviors:['jump','acrobat','glide']},
+  {id:'deep-glow-jig',name:'DEEP GLOW JIG',koName:'딥 글로우 지그',unlock:45,zone:'deep',depth:'22–60 M',time:'night',behaviors:['bottom','power','pulse','serpent']},
+];
+
+const HABITAT_TYPES=[
+  {zone:'surface',name:'TIDE LINE',koName:'조류 경계',radius:.9,angle:0},
+  {zone:'shallow',name:'REEF SHELF',koName:'연안 여밭',radius:.98,angle:1.62},
+  {zone:'mid',name:'CURRENT LANE',koName:'중층 물길',radius:1.08,angle:3.18},
+  {zone:'deep',name:'DROP-OFF',koName:'심해 급경사',radius:1.17,angle:4.72},
+];
+export const FISHING_HABITATS=REGIONS.flatMap((region,regionIndex)=>{
+  const phase=(regionIndex*.83+.28)%(Math.PI*2);
+  return HABITAT_TYPES.map((type,index)=>({id:`${region.name.toLowerCase().replaceAll(' ','-')}-${type.zone}`,region:region.name,zone:type.zone,name:type.name,koName:type.koName,x:region.x+Math.cos(phase+type.angle)*region.r*type.radius,z:region.z+Math.sin(phase+type.angle)*region.r*type.radius,index}));
+});
+export function fishingHabitatAt(region,x=0,z=0,zone='shallow'){
+  const pool=FISHING_HABITATS.filter(entry=>entry.region===region&&entry.zone===zone),fallback=FISHING_HABITATS.find(entry=>entry.region===region)||FISHING_HABITATS[0],habitat=pool[0]||fallback,dx=habitat.x-x,dz=habitat.z-z,distance=Math.hypot(dx,dz),strength=clamp(1-distance/320,0,1),status=strength>=.7?'HOT SCHOOL':strength>=.34?'ACTIVE WATER':'SPARSE WATER';
+  return{...habitat,distance,strength,status,bearing:(Math.atan2(dx,dz)*180/Math.PI+360)%360,biteRate:.72+strength*.7};
+}
+
+const speciesDepth=behavior=>{
+  if(['jump','acrobat','glide'].includes(behavior))return'surface';
+  if(['bottom','power','pulse','serpent'].includes(behavior))return'deep';
+  if(['runner'].includes(behavior))return'mid';
+  return'shallow';
+};
+const timeAffinity=(time,hour)=>{
+  if(time==='any')return 1;
+  if(time==='day')return hour>=8&&hour<18?1.32:.68;
+  if(time==='night')return hour>=20||hour<5?1.42:.58;
+  if(time==='dawn')return((hour>=5&&hour<9)||(hour>=17&&hour<20))?1.48:.55;
+  return 1;
+};
+export function fishingBaitMatch(species,bait=FISHING_BAITS[0],hour=12){
+  const resolved=typeof bait==='string'?FISHING_BAITS.find(entry=>entry.id===bait)||FISHING_BAITS[0]:bait;
+  const behaviorMatch=resolved.behaviors.includes(species.behavior),depthMatch=speciesDepth(species.behavior)===resolved.zone;
+  return(behaviorMatch?1.52:depthMatch?1.18:.72)*timeAffinity(resolved.time,hour);
+}
+export function baitCondition(bait=FISHING_BAITS[0],hour=12){
+  const resolved=typeof bait==='string'?FISHING_BAITS.find(entry=>entry.id===bait)||FISHING_BAITS[0]:bait,affinity=timeAffinity(resolved.time,hour);
+  return affinity>=1.4?'PRIME WINDOW':affinity>=1?'GOOD WINDOW':'OFF WINDOW';
+}
+
+function weightedSpecies(region,random,seaState=1,bait=FISHING_BAITS[0],hour=12,habitat=null){
   const pool=FISH_SPECIES.filter(s=>s.regions.includes(region));
-  const scored=pool.map(species=>{let weight=FISH_RARITIES[species.rarity].weight;if(seaState>1.35&&['runner','power','acrobat'].includes(species.behavior))weight*=1.25;if(seaState<1&&species.behavior==='bottom')weight*=1.18;return{species,weight}});
+  const scored=pool.map(species=>{let weight=FISH_RARITIES[species.rarity].weight*fishingBaitMatch(species,bait,hour);if(habitat&&speciesDepth(species.behavior)===habitat.zone)weight*=1+habitat.strength*.58;if(seaState>1.35&&['runner','power','acrobat'].includes(species.behavior))weight*=1.25;if(seaState<1&&species.behavior==='bottom')weight*=1.18;return{species,weight}});
   let roll=random()*scored.reduce((n,x)=>n+x.weight,0);for(const entry of scored){roll-=entry.weight;if(roll<=0)return entry.species}return scored.at(-1)?.species||FISH_SPECIES[0];
 }
 
 export class FishingDirector{
   constructor({random=Math.random,storageKey='tidal-racer-v18-fishing'}={}){
-    this.random=random;this.storageKey=storageKey;this.active=false;this.phase='stowed';this.timer=0;this.tension=28;this.stamina=0;this.distance=0;this.direction=0;this.directionTimer=0;this.looseTimer=0;this.target=null;this.catchResult=null;this.events=[];
-    this.profile={total:0,earned:0,discovered:{},best:{},byRegion:{}};this.load();
+    this.random=random;this.storageKey=storageKey;this.active=false;this.phase='stowed';this.timer=0;this.tension=28;this.stamina=0;this.distance=0;this.direction=0;this.directionTimer=0;this.looseTimer=0;this.target=null;this.catchResult=null;this.events=[];this.scanContext={region:'GOLDEN COAST',x:0,z:0};this.sonar=fishingHabitatAt('GOLDEN COAST',0,0);
+    this.profile={total:0,earned:0,baitId:FISHING_BAITS[0].id,discovered:{},best:{},byRegion:{}};this.load();
   }
-  load(){try{const saved=JSON.parse(localStorage.getItem(this.storageKey)||'null');if(saved)this.profile={...this.profile,...saved}}catch{}}
-  save(){try{localStorage.setItem(this.storageKey,JSON.stringify(this.profile))}catch{}}
+  load(){if(!this.storageKey)return;try{const saved=JSON.parse(localStorage.getItem(this.storageKey)||'null');if(saved)this.restore(saved)}catch{}}
+  save(){if(!this.storageKey)return;try{localStorage.setItem(this.storageKey,JSON.stringify(this.serialize()))}catch{}}
+  serialize(){return JSON.parse(JSON.stringify(this.profile))}
+  restore(saved){if(!saved||typeof saved!=='object')return this.profile;this.profile={...this.profile,...saved,discovered:{...(saved.discovered||{})},best:{...(saved.best||{})},byRegion:{...(saved.byRegion||{})}};if(!FISHING_BAITS.some(entry=>entry.id===this.profile.baitId&&this.profile.total>=entry.unlock))this.profile.baitId=FISHING_BAITS[0].id;return this.profile}
   get tackle(){return[...FISHING_TACKLE].reverse().find(t=>this.profile.total>=t.unlock)||FISHING_TACKLE[0]}
+  get availableBaits(){return FISHING_BAITS.filter(entry=>this.profile.total>=entry.unlock)}
+  get bait(){return FISHING_BAITS.find(entry=>entry.id===this.profile.baitId)||FISHING_BAITS[0]}
+  scan(context={}){
+    this.scanContext={...this.scanContext,...context};this.sonar=fishingHabitatAt(this.scanContext.region,this.scanContext.x,this.scanContext.z,this.bait.zone);return this.sonar;
+  }
+  cycleBait(){
+    if(!this.active||!['ready','landed','lost'].includes(this.phase))return null;
+    const options=this.availableBaits,index=Math.max(0,options.findIndex(entry=>entry.id===this.bait.id)),bait=options[(index+1)%options.length]||FISHING_BAITS[0];
+    this.profile.baitId=bait.id;this.scan();this.save();this.emit('baitChanged',{bait,options,sonar:this.sonar});return bait;
+  }
   emit(type,data={}){this.events.push({type,...data})}
   drainEvents(){return this.events.splice(0)}
-  enter(region){if(this.active)return;this.active=true;this.phase='ready';this.catchResult=null;this.distance=0;this.stamina=0;this.tension=18;this.emit('entered',{region,tackle:this.tackle})}
+  enter(region,context={}){if(this.active)return;this.active=true;this.phase='ready';this.catchResult=null;this.distance=0;this.stamina=0;this.tension=18;this.scan({region,...context});this.emit('entered',{region,tackle:this.tackle,sonar:this.sonar})}
   exit(reason='manual'){if(!this.active)return;if(['bite','hooked'].includes(this.phase))this.emit('escaped',{reason:'line-stowed',species:this.target?.species});this.active=false;this.phase='stowed';this.target=null;this.emit('exited',{reason})}
   action(context={}){
     if(!this.active)return;
     if(['ready','landed','lost'].includes(this.phase)){this.cast(context);return}
     if(this.phase==='bite')this.hook();
   }
-  cast({region='GOLDEN COAST',seaState=1}={}){this.phase='waiting';this.timer=2.2+this.random()*3.8;this.tension=18;this.stamina=0;this.distance=12+this.random()*7;this.target={region,seaState,species:null,weight:0};this.catchResult=null;this.emit('cast',{region})}
-  beginBite(){const species=weightedSpecies(this.target.region,this.random,this.target.seaState),weight=species.minKg+Math.pow(this.random(),1.7)*(species.maxKg-species.minKg);this.target={...this.target,species,weight};this.phase='bite';this.timer=3.4+(1-species.fight)*.8;this.emit('bite',{species,weight})}
+  cast({region='GOLDEN COAST',seaState=1,hour=12,x=this.scanContext.x,z=this.scanContext.z}={}){const bait=this.bait,condition=baitCondition(bait,hour),timeBonus=timeAffinity(bait.time,hour),habitat=this.scan({region,x,z}),windowRate=timeBonus>=1.3?1.22:timeBonus<.8?.82:1;this.phase='waiting';this.timer=(2.2+this.random()*3.8)/(windowRate*habitat.biteRate);this.tension=18;this.stamina=0;this.distance=12+this.random()*7;this.target={region,seaState,hour,bait,condition,depth:bait.depth,habitat,species:null,weight:0};this.catchResult=null;this.emit('cast',{region,bait,condition,depth:bait.depth,habitat})}
+  beginBite(){const species=weightedSpecies(this.target.region,this.random,this.target.seaState,this.target.bait,this.target.hour,this.target.habitat),weight=species.minKg+Math.pow(this.random(),1.7)*(species.maxKg-species.minKg),match=fishingBaitMatch(species,this.target.bait,this.target.hour);this.target={...this.target,species,weight,match};this.phase='bite';this.timer=3.4+(1-species.fight)*.8;this.emit('bite',{species,weight,bait:this.target.bait,match,habitat:this.target.habitat})}
   hook(){const species=this.target?.species;if(!species)return;this.phase='hooked';this.stamina=72+species.fight*68;this.distance=15+species.fight*18+this.random()*8;this.tension=38+species.fight*12;this.direction=this.random()>.5?1:-1;this.directionTimer=.55+this.random()*1.3;this.looseTimer=0;this.emit('hooked',{species,weight:this.target.weight})}
   fail(reason){const species=this.target?.species;this.phase='lost';this.timer=2;this.emit('escaped',{reason,species});this.target=null}
   land(){const {species,weight}=this.target,rarity=FISH_RARITIES[species.rarity],quality=.86+this.random()*.28,value=Math.round(species.baseValue*rarity.multiplier*(.45+weight/species.maxKg*.85)*quality),record=this.profile.best[species.id]||0,isRecord=weight>record;this.profile.total++;this.profile.earned+=value;this.profile.discovered[species.id]=(this.profile.discovered[species.id]||0)+1;this.profile.byRegion[this.target.region]=(this.profile.byRegion[this.target.region]||0)+1;if(isRecord)this.profile.best[species.id]=weight;this.save();this.catchResult={species,weight,value,isRecord,quality};this.phase='landed';this.timer=3.2;this.emit('landed',this.catchResult);this.target=null}
@@ -80,13 +139,13 @@ export class FishingDirector{
     else if(this.phase==='bite'){this.timer-=dt;if(this.timer<=0)this.fail('missed-bite')}
     else if(this.phase==='hooked'){
       const species=this.target.species,tackle=this.tackle,reel=!!input.reel,slack=!!input.slack,rod=clamp(input.rod||0,-1,1);this.directionTimer-=dt;if(this.directionTimer<=0){this.direction=(this.random()>.5?1:-1);this.directionTimer=.45+this.random()*(1.5-species.fight*.55)}
-      const pulse=.55+.45*Math.sin((context.time||0)*(3.4+species.fight*2.8)+species.fight*5),pull=species.fight*(.58+pulse*.72),counter=rod&&Math.sign(rod)===-Math.sign(this.direction);this.tension+=(pull*(counter?.44:1)-.34)*24*dt;
+      const control=clamp(Number(context.control)||1,.8,1.2),pulse=.55+.45*Math.sin((context.time||0)*(3.4+species.fight*2.8)+species.fight*5),pull=species.fight*(.58+pulse*.72),counter=rod&&Math.sign(rod)===-Math.sign(this.direction);this.tension+=(pull*(counter?.44:1)-.34)*24*dt;
       if(reel&&!slack){this.tension+=(10+species.fight*8)*dt;const safe=this.tension>22&&this.tension<this.tackle.line*.88;if(safe){this.stamina-=dt*(11+8*tackle.reel)*(1.18-species.fight*.35);this.distance-=dt*(2.1+2.4*tackle.reel)*(1.12-species.fight*.26)}else this.stamina-=dt*1.2}
-      else if(slack){this.tension-=34*dt*tackle.control;this.distance+=dt*(.8+pull)}else this.tension-=dt*(7+counter*8*tackle.control);
-      if(counter)this.tension-=dt*8*tackle.control;this.distance+=dt*Math.max(0,pull-.62)*2.2;this.tension=clamp(this.tension,0,tackle.line+8);this.stamina=Math.max(0,this.stamina);this.distance=clamp(this.distance,0,55);
+      else if(slack){this.tension-=34*dt*tackle.control*control;this.distance+=dt*(.8+pull)}else this.tension-=dt*(7+counter*8*tackle.control*control);
+      if(counter)this.tension-=dt*8*tackle.control*control;this.distance+=dt*Math.max(0,pull-.62)*2.2;this.tension=clamp(this.tension,0,tackle.line+8);this.stamina=Math.max(0,this.stamina);this.distance=clamp(this.distance,0,55);
       if(this.tension>tackle.line)this.fail('line-snap');else{this.looseTimer=this.tension<7?this.looseTimer+dt:Math.max(0,this.looseTimer-dt*2);if(this.looseTimer>2.15)this.fail('slack-line');else if(this.stamina<=0&&this.distance<=2.2)this.land()}
     }else if(['landed','lost'].includes(this.phase)){this.timer-=dt;if(this.timer<=0){this.phase='ready';this.catchResult=null;this.distance=0;this.stamina=0;this.tension=18}}
     return this.snapshot();
   }
-  snapshot(){return{active:this.active,phase:this.phase,timer:this.timer,tension:this.tension,stamina:this.stamina,distance:this.distance,direction:this.direction,target:this.target,catchResult:this.catchResult,tackle:this.tackle,profile:this.profile}}
+  snapshot(){return{active:this.active,phase:this.phase,timer:this.timer,tension:this.tension,stamina:this.stamina,distance:this.distance,direction:this.direction,target:this.target,catchResult:this.catchResult,tackle:this.tackle,bait:this.bait,baitOptions:this.availableBaits,sonar:this.sonar,profile:this.profile}}
 }

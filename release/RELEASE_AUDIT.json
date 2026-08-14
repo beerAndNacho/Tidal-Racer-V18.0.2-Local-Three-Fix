@@ -1,7 +1,7 @@
 {
   "product": "Tidal Racer",
   "version": "18.0.2",
-  "generatedAt": "2026-08-13T10:49:19.151Z",
+  "generatedAt": "2026-08-14T00:07:41.337Z",
   "saleReady": false,
   "summary": {
     "passed": 14,
@@ -14,7 +14,7 @@
       "id": "required-files",
       "ok": true,
       "severity": "blocker",
-      "evidence": "21 required files present"
+      "evidence": "44 required files present"
     },
     {
       "id": "three-runtime-license",
@@ -32,7 +32,7 @@
       "id": "referenced-assets-exist",
       "ok": true,
       "severity": "blocker",
-      "evidence": "26 literal asset references resolved"
+      "evidence": "27 literal asset references resolved"
     },
     {
       "id": "enabled-assets-provenance",
@@ -62,7 +62,7 @@
       "id": "generated-texture-provenance",
       "ok": true,
       "severity": "blocker",
-      "evidence": "4/4 generated texture hashes and sources verified"
+      "evidence": "5/5 generated texture hashes and sources verified"
     },
     {
       "id": "third-party-notices",
@@ -100,13 +100,13 @@
       "id": "package-size-budget",
       "ok": true,
       "severity": "blocker",
-      "evidence": "99.04 MiB / 100 MiB"
+      "evidence": "86.86 MiB / 100 MiB · dependency-closed Three.js runtime"
     },
     {
       "id": "automated-regression",
       "ok": true,
       "severity": "blocker",
-      "evidence": "34/34 suites passed"
+      "evidence": "109/109 suites passed"
     },
     {
       "id": "manual-browser-matrix",

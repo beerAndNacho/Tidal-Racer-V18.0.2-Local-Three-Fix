@@ -1,16 +1,17 @@
 import fs from 'node:fs';
+import { grantLifestyleEffect, lifestyleBonuses as resolveLifestyleBonuses, lifestyleClock, pruneLifestyleEffects, lifestyleEffectFor } from '../v18/lifestyle-effect-system.js';
 
 const life=fs.readFileSync('v18/city-life-system.js','utf8'),main=fs.readFileSync('v18/main.js','utf8'),index=fs.readFileSync('index.html','utf8'),policy=JSON.parse(fs.readFileSync('release/release-policy.json','utf8')),tests=[],add=(name,ok)=>tests.push({name,ok:Boolean(ok)});
-const facilityIds=['home','grocery','restaurant','bank','nightlife','gym'];
+const facilityIds=['marina-workshop','home','grocery','restaurant','harbor-office','bank','fish-market','nightlife','gym'];
 const core=life.slice(life.indexOf('const clamp='),life.indexOf('function physical(')).replaceAll('export ','');
-const {CityLifeDirector:TestLife}=new Function(`${core};return {CityLifeDirector};`)();
-add('six grounded city facilities are authored',facilityIds.every(id=>life.includes(`id:'${id}'`))&&(life.match(/exterior:\{x:/g)||[]).length===6);
+const {CityLifeDirector:TestLife}=new Function('grantLifestyleEffect','resolveLifestyleBonuses','lifestyleClock','pruneLifestyleEffects','lifestyleEffectFor',`${core};return {CityLifeDirector};`)(grantLifestyleEffect,resolveLifestyleBonuses,lifestyleClock,pruneLifestyleEffects,lifestyleEffectFor);
+add('nine grounded city facilities are authored',facilityIds.every(id=>life.includes(`id:'${id}'`))&&(life.match(/exterior:\{x:/g)||[]).length===9);
 add('dismount and boarding require the Golden Coast dock',life.includes('canDisembark')&&life.includes('disembarkRadius')&&life.includes('canBoard')&&main.includes('toggleOnFoot'));
 add('keyboard and gamepad expose on-foot actions',main.includes("e.code==='KeyX'")&&main.includes("e.code==='KeyE'")&&main.includes("event.action==='item'")&&main.includes('handleLifeInteraction'));
 add('arrow and WASD controls drive walking physics',main.includes('function updateOnFoot(dt)')&&main.includes('liveControls.throttle-liveControls.brake')&&main.includes('heading-=turn*2.45'));
 add('premium GLB rider is reused on foot',main.includes('assets.spawn(assetId)')&&main.includes('prepareFootAvatar')&&main.includes('animateFootAvatar'));
 add('late premium loading cannot duplicate the rider on the parked craft',main.includes("if(cityLife.mode!=='water')mountedRiderVisible(false)"));
-add('real interiors and contextual doors exist',life.includes('furnishInterior')&&life.includes('city-life-interior-')&&life.includes("kind:'enter'")&&life.includes("kind:'exit'"));
+add('real interiors and contextual doors exist',life.includes('furnishInterior')&&life.includes('city-life-interior-')&&life.includes("kind:status.open?'enter':'closed'")&&life.includes("kind:'exit'"));
 add('home supports sleep shower cooking and downtime',['sleep','shower','home_meal','watch_tv'].every(id=>life.includes(`'${id}'`)));
 add('restaurant and grocery affect hunger and energy',['breakfast','seafood_bowl','chef_course','groceries','coffee'].every(id=>life.includes(`'${id}'`)));
 add('bank protects wallet and account balances',life.includes("deposit_1000")&&life.includes("withdraw_5000")&&life.includes("reason:'wallet'")&&life.includes("reason:'bank'"));
