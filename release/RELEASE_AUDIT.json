@@ -1,7 +1,7 @@
 {
   "product": "Tidal Racer",
   "version": "18.0.2",
-  "generatedAt": "2026-08-14T00:07:41.337Z",
+  "generatedAt": "2026-08-14T00:27:40.481Z",
   "saleReady": false,
   "summary": {
     "passed": 14,
@@ -100,7 +100,7 @@
       "id": "package-size-budget",
       "ok": true,
       "severity": "blocker",
-      "evidence": "86.86 MiB / 100 MiB · dependency-closed Three.js runtime"
+      "evidence": "86.87 MiB / 100 MiB · dependency-closed Three.js runtime"
     },
     {
       "id": "automated-regression",
