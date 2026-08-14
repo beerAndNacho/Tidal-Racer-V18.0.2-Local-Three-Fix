@@ -404,6 +404,13 @@ network transmission; a signed JSON export remains locked until 30 active
 minutes and all save, control, gamepad, accessibility, fishing/activity,
 browser-version, and GPU gates pass.
 
+Golden Marina now operates a reactive Harbor Watch instead of a generic
+wanted-star system. Reckless wakes in Free Roam escalate from a safety
+advisory to a physical patrol intercept and port hold. Patrol craft follow the
+live wave surface, form up around the player, and use alternating beacons and
+searchlights. Slowing to a four-second heave-to unlocks notice settlement with
+`H` or gamepad `Y`; clean passage earns periodic good-mariner credit.
+
 ## Feedback that helps most
 
 If you enjoy the direction, a GitHub star makes the project easier to discover.

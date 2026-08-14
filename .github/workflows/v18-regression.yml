@@ -17,6 +17,8 @@ jobs:
         run: node scripts/legal-data-flow-check.mjs
       - name: Signed local playtest evidence recorder
         run: node scripts/v18-playtest-evidence-check.mjs
+      - name: Reactive Harbor Watch patrol
+        run: node scripts/v18-harbor-watch-check.mjs
       - name: V18 loading and streaming
         run: node scripts/v18-loading-check.mjs
       - name: Local launcher and runtime
