@@ -17,6 +17,8 @@ node scripts/build-release.mjs
 
 ## Legal and storefront gate
 
+- Review release/product-data-map.json against the exact commercial build and run node scripts/legal-data-flow-check.mjs. This verifies engineering facts but does not replace counsel.
+- Work through release/LEGAL_REVIEW_PACKET.md. The three final-named policies are deliberately blocked drafts and must retain their DRAFT notices until an authorized reviewer approves every bracketed decision.
 - Copy `release/publisher.example.json` to `release/publisher.json` and replace every placeholder with verified publisher information.
 - Finalize EULA, privacy notice, support policy, refund/store disclosures and age rating for each sales territory.
 - Confirm trademarks, title availability and all marketing screenshots with the publisher.

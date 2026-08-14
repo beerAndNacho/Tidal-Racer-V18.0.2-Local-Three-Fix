@@ -1,7 +1,7 @@
 {
   "product": "Tidal Racer",
   "version": "18.0.2",
-  "generatedAt": "2026-08-14T00:27:40.481Z",
+  "generatedAt": "2026-08-14T00:41:36.723Z",
   "saleReady": false,
   "summary": {
     "passed": 14,
@@ -81,12 +81,12 @@
       "ok": false,
       "severity": "blocker",
       "evidence": {
-        "missingLegal": [
+        "missingLegal": [],
+        "unapprovedLegal": [
           "release/EULA.md",
           "release/PRIVACY.md",
           "release/SUPPORT_POLICY.md"
         ],
-        "unapprovedLegal": [],
         "approval": "release/commercial-approval.json missing or incomplete"
       }
     },
@@ -106,7 +106,7 @@
       "id": "automated-regression",
       "ok": true,
       "severity": "blocker",
-      "evidence": "109/109 suites passed"
+      "evidence": "110/110 suites passed"
     },
     {
       "id": "manual-browser-matrix",

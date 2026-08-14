@@ -13,6 +13,8 @@ jobs:
           node-version: 22
       - name: Public repository safety
         run: node scripts/public-release-check.mjs
+      - name: Legal data-flow consistency
+        run: node scripts/legal-data-flow-check.mjs
       - name: V18 loading and streaming
         run: node scripts/v18-loading-check.mjs
       - name: Local launcher and runtime

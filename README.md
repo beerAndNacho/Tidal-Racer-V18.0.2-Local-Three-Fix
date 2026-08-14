@@ -420,11 +420,15 @@ Chrome, Edge, Firefox, and integrated-GPU verification is still ongoing.
 - Runtime code and assets are local; the game stores progress only in browser
   local storage.
 - Asset provenance and third-party licenses are documented.
+- The versioned engineering data map and commercial EULA, privacy, and support
+  drafts are checked against the runtime. They remain visibly unapproved until
+  verified publisher information and authorized legal sign-off are supplied.
 
 Run the public checks with:
 
 ```powershell
 node scripts/public-release-check.mjs
+node scripts/legal-data-flow-check.mjs
 node scripts/package-smoke-check.mjs
 ```
 

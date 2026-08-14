@@ -1,0 +1,19 @@
+{
+  "productVersion": "18.0.2",
+  "publisherLegalName": "REPLACE_WITH_PUBLISHER",
+  "legalReviewer": "REPLACE_WITH_COUNSEL_OR_AUTHORIZED_REVIEWER",
+  "approvedAt": "REPLACE_WITH_ISO_8601_TIMESTAMP",
+  "signature": "REPLACE_WITH_APPROVER_SIGNATURE",
+  "territories": ["REPLACE_WITH_APPROVED_TERRITORIES"],
+  "storefronts": ["REPLACE_WITH_APPROVED_STOREFRONTS"],
+  "ageRating": "REPLACE_WITH_RATING_OR_EXEMPTION",
+  "price": 0,
+  "currency": "REPLACE_WITH_ISO_4217_CURRENCY",
+  "eulaApproved": false,
+  "privacyApproved": false,
+  "supportPolicyApproved": false,
+  "refundDisclosureApproved": false,
+  "ageRatingApproved": false,
+  "trademarkReviewCompleted": false,
+  "marketingRightsReviewed": false
+}

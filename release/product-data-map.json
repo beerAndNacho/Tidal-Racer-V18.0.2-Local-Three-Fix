@@ -1,0 +1,48 @@
+{
+  "product": "Tidal Racer",
+  "version": "18.0.2",
+  "reviewStatus": "engineering-verified; legal approval pending",
+  "accountRequired": false,
+  "publisherTelemetry": false,
+  "publisherAnalytics": false,
+  "publisherCrashReporting": false,
+  "publisherAdvertising": false,
+  "publisherCloudSave": false,
+  "cookiesUsedByGame": false,
+  "networkBehavior": {
+    "localOriginOnly": true,
+    "launcherHost": "127.0.0.1",
+    "relativeRuntimeFetches": [
+      "./assets/manifest.json",
+      "local JavaScript modules, textures, models, and decoder files selected by the boot loader"
+    ],
+    "externalExecutableRuntime": false
+  },
+  "browserStorage": [
+    {
+      "keys": ["tidal-racer-v18-save-meta", "tidal-racer-v18-save-slot-1..3", "tidal-racer-v18-save-slot-1..3-backup", "tidal-racer-v18-save-slot-1..3-archive"],
+      "purpose": "local progression, recovery backup, reset archive, active slot, and save integrity metadata"
+    },
+    {
+      "keys": ["tidal-racer-v13-profile", "tidal-racer-v18-fishing", "tidal-racer-world-activities-v1"],
+      "purpose": "legacy migration and ancillary local progression"
+    },
+    {
+      "keys": ["tidal-racer-audio-settings", "tidal-racer-accessibility-v1", "tidal-racer-gamepad-v1", "tidal-racer-language"],
+      "purpose": "local player preferences and control configuration"
+    }
+  ],
+  "userInitiatedExports": [
+    {"format": "JSON", "purpose": "save backup and import"},
+    {"format": "PNG", "purpose": "photo mode capture"}
+  ],
+  "deletion": [
+    "Use the in-game save slot reset for progression data.",
+    "Clear site data for the 127.0.0.1 game origin to remove all browser-stored game data.",
+    "Delete exported JSON and PNG files from the operating system separately."
+  ],
+  "externalSurfacesOutsideGameRuntime": [
+    "GitHub repository, release downloads, issues, and traffic statistics are governed by GitHub.",
+    "Any future storefront purchase, payment, refund, or account flow is governed by that storefront and must be disclosed before commercial release."
+  ]
+}

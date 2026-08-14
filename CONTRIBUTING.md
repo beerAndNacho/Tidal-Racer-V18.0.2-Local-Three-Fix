@@ -11,6 +11,7 @@ and focused pull requests are welcome.
 
 ```powershell
 node scripts/public-release-check.mjs
+node scripts/legal-data-flow-check.mjs
 node scripts/package-smoke-check.mjs
 node scripts/v18-three-runtime-slim-check.mjs
 node scripts/v18-city-life-check.mjs
